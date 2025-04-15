@@ -10,6 +10,9 @@ public class User {
     private LinkedList<Card> cardList;
     private LinkedList<Deck> deckList;
 
+    // Adding constructors:
+    //------------------------------------------------------------------------------------------------------------------
+    // All-Argument constructor:
     public User(int userID, String userName, String emailAddress, String password) {
         this.userID = userID;
         this.userName = userName;
@@ -19,6 +22,7 @@ public class User {
         deckList = new LinkedList<>();
     }
 
+    // No-Argument constructor:
     public User() {
         userID = 0;
         userName = "";
@@ -28,6 +32,40 @@ public class User {
         deckList = new LinkedList<>();
     }
 
+    // Adding Methods:
+    //------------------------------------------------------------------------------------------------------------------
+    /**
+     * Method to facilitate the process of creating a new instance of the User class.
+     * @param userID refers to the reference number of the user's instance.
+     * @param userName refers to the name associated with the user instance.
+     * @param emailAddress refers to the email address of the user instance.
+     * @param password refers to the user's password which will be required to access & edit the user's information.
+     * @param cardList refers to the list of all the cards that the user has in their collections.
+     * @param deckList refers to the many sub-collections of cards that the user may have.
+     * @return
+     */
+    public User createNewUser(int userID, String userName, String emailAddress, String password, LinkedList<Card> cardList, LinkedList<Deck> deckList) {
+        return new User(userID, userName, emailAddress, password, cardList, deckList);
+    }
+
+    /**
+     * Method to edit an existing user instance's information.
+     * @param userID refers the identifying number of the user instance.
+     */
+    public void editUser(int userID){
+        //TODO: apply logic to edit a user.
+    }
+
+    /**
+     * Method to find and delete a user instance.
+     * @param userID refers the identifying number of the user instance.
+     */
+    public void deleteUser(int userID) {
+        //TODO: apply logic t remove a user.
+    }
+
+    // Adding Getters and Setters
+    //------------------------------------------------------------------------------------------------------------------
     public int getUserID() {
         return userID;
     }
@@ -76,6 +114,21 @@ public class User {
         this.deckList = deckList;
     }
 
+    // Adding Equals & Hashmap:
+    //------------------------------------------------------------------------------------------------------------------
+    public boolean equals(Object object) {
+        if (object == null || getClass() != object.getClass()) return false;
+        if (!super.equals(object)) return false;
+        User user = (User) object;
+        return userID == user.userID && java.util.Objects.equals(userName, user.userName) && java.util.Objects.equals(emailAddress, user.emailAddress) && java.util.Objects.equals(password, user.password) && java.util.Objects.equals(cardList, user.cardList) && java.util.Objects.equals(deckList, user.deckList);
+    }
+
+    public int hashCode() {
+        return java.util.Objects.hash(super.hashCode(), userID, userName, emailAddress, password, cardList, deckList);
+    }
+
+    // Adding toString method:
+    //------------------------------------------------------------------------------------------------------------------
     @Override
     public String toString() {
         return "User{" +

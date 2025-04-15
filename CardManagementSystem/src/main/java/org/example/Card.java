@@ -9,6 +9,9 @@ public abstract class Card {
     private int releaseYear;
     private double price;
 
+    // Adding constructors:
+    //------------------------------------------------------------------------------------------------------------------
+    // All-Argument constructor:
     public Card(int cardID, GameType gameType, String cardName,
                 String description, int releaseYear, double price) {
         this.cardID = cardID;
@@ -19,6 +22,7 @@ public abstract class Card {
         this.price = price;
     }
 
+    // No-Argument constructor:
     public Card() {
         cardID = 0;
         gameType = null;
@@ -27,7 +31,11 @@ public abstract class Card {
         releaseYear = 0;
         price = 0.00;
     }
+    // Adding Methods:
+    //------------------------------------------------------------------------------------------------------------------
 
+    // Adding Getters and Setters
+    //------------------------------------------------------------------------------------------------------------------
     public int getCardID() {
         return cardID;
     }
@@ -76,6 +84,22 @@ public abstract class Card {
         this.price = price;
     }
 
+    // Adding Equals & Hashmap:
+    //------------------------------------------------------------------------------------------------------------------
+
+    public boolean equals(Object object) {
+        if (object == null || getClass() != object.getClass()) return false;
+        if (!super.equals(object)) return false;
+        Card card = (Card) object;
+        return cardID == card.cardID && releaseYear == card.releaseYear && java.lang.Double.compare(price, card.price) == 0 && java.util.Objects.equals(gameType, card.gameType) && java.util.Objects.equals(cardName, card.cardName) && java.util.Objects.equals(description, card.description);
+    }
+
+    public int hashCode() {
+        return java.util.Objects.hash(super.hashCode(), cardID, gameType, cardName, description, releaseYear, price);
+    }
+
+    // Adding toString method:
+    //------------------------------------------------------------------------------------------------------------------
     @Override
     public String toString() {
         return "Card{" +
