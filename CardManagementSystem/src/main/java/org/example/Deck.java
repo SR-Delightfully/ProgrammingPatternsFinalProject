@@ -42,4 +42,13 @@ public class Deck {
     public void setCardList(LinkedList<Card> cardList) {
         this.cardList = cardList;
     }
+
+    @Override
+    public String toString() {
+        return "Deck{" +
+                "deckID=" + deckID +
+                ", deckType=" + deckType +
+                ", cardList=" + cardList +
+                '}';
+    }
 }

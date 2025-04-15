@@ -75,4 +75,16 @@ public abstract class Card {
     public void setPrice(double price) {
         this.price = price;
     }
+
+    @Override
+    public String toString() {
+        return "Card{" +
+                "cardID=" + cardID +
+                ", gameType=" + gameType +
+                ", cardName='" + cardName + '\'' +
+                ", description='" + description + '\'' +
+                ", releaseYear=" + releaseYear +
+                ", price=" + price +
+                '}';
+    }
 }

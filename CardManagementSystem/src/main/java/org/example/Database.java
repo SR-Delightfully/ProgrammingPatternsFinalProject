@@ -1,4 +1,9 @@
 package org.example;
 
-public class Database {
+import java.util.HashMap;
+import java.util.LinkedList;
+
+public class Database<T> {
+    private HashMap<String,String> entries;
+    private LinkedList<T> entryLogs;
 }

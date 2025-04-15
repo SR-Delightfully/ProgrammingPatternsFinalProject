@@ -19,6 +19,15 @@ public class User {
         deckList = new LinkedList<>();
     }
 
+    public User() {
+        userID = 0;
+        userName = "";
+        emailAddress = "";
+        password = "";
+        cardList = new LinkedList<>();
+        deckList = new LinkedList<>();
+    }
+
     public int getUserID() {
         return userID;
     }
@@ -65,5 +74,17 @@ public class User {
 
     public void setDeckList(LinkedList<Deck> deckList) {
         this.deckList = deckList;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "userID=" + userID +
+                ", userName='" + userName + '\'' +
+                ", emailAddress='" + emailAddress + '\'' +
+                ", password='" + password + '\'' +
+                ", cardList=" + cardList +
+                ", deckList=" + deckList +
+                '}';
     }
 }

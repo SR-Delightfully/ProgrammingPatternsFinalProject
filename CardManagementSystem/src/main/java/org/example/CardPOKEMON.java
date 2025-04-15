@@ -1,5 +1,7 @@
 package org.example;
 
+import java.util.Arrays;
+
 public class CardPOKEMON extends Card {
     private int health;
     private String weakness;
@@ -75,5 +77,17 @@ public class CardPOKEMON extends Card {
 
     public void setHealth(int health) {
         this.health = health;
+    }
+
+    @Override
+    public String toString() {
+        return "CardPOKEMON{" +
+                "health=" + health +
+                ", weakness='" + weakness + '\'' +
+                ", resistance='" + resistance + '\'' +
+                ", retreat=" + retreat +
+                ", types=" + Arrays.toString(types) +
+                ", stage=" + stage +
+                '}';
     }
 }

@@ -1,5 +1,7 @@
 package org.example;
 
+import java.util.Arrays;
+
 public class CardMTG extends Card {
     private int power;
     private int toughness;
@@ -84,5 +86,18 @@ public class CardMTG extends Card {
 
     public void setPower(int power) {
         this.power = power;
+    }
+
+    @Override
+    public String toString() {
+        return "CardMTG{" +
+                "power=" + power +
+                ", toughness=" + toughness +
+                ", hasBackside=" + hasBackside +
+                ", cardType='" + cardType + '\'' +
+                ", colors=" + Arrays.toString(colors) +
+                ", manaCost=" + Arrays.toString(manaCost) +
+                ", abilities=" + Arrays.toString(abilities) +
+                '}';
     }
 }

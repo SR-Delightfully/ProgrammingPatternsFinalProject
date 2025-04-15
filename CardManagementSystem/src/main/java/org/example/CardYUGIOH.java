@@ -49,12 +49,12 @@ public class CardYUGIOH extends Card {
         this.series = series;
     }
 
-    @Override
+
     public String getType() {
         return type;
     }
 
-    @Override
+
     public void setType(String type) {
         this.type = type;
     }
