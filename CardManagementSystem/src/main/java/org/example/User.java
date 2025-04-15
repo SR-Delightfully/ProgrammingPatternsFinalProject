@@ -13,7 +13,7 @@ public class User {
     // Adding constructors:
     //------------------------------------------------------------------------------------------------------------------
     // All-Argument constructor:
-    public User(int userID, String userName, String emailAddress, String password) {
+    public User(int userID, String userName, String emailAddress, String password, LinkedList<Card> cardList, LinkedList<Deck> deckList) {
         this.userID = userID;
         this.userName = userName;
         this.emailAddress = emailAddress;
@@ -45,7 +45,8 @@ public class User {
      * @return a new user with the given information.
      */
     public User createNewUser(int userID, String userName, String emailAddress, String password, LinkedList<Card> cardList, LinkedList<Deck> deckList) {
-        return new User(userID, userName, emailAddress, password, cardList, deckList);
+        User user = new User(userID, userName, emailAddress, password, cardList, deckList);
+        return user;
     }
 
     /**
