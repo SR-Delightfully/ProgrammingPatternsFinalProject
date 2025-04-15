@@ -2,14 +2,14 @@ package org.example;
 
 
 public abstract class Card {
-    private int cardID;
+    private String cardID;
     private GameType gameType;
     private String cardName;
     private String description;
     private int releaseYear;
     private double price;
 
-    public Card(int cardID, GameType gameType, String cardName,
+    public Card(String cardID, GameType gameType, String cardName,
                 String description, int releaseYear, double price) {
         this.cardID = cardID;
         this.gameType = gameType;
@@ -20,7 +20,7 @@ public abstract class Card {
     }
 
     public Card() {
-        cardID = 0;
+        cardID = "";
         gameType = null;
         cardName = null;
         description = null;
@@ -28,11 +28,11 @@ public abstract class Card {
         price = 0.00;
     }
 
-    public int getCardID() {
+    public String getCardID() {
         return cardID;
     }
 
-    public void setCardID(int cardID) {
+    public void setCardID(String cardID) {
         this.cardID = cardID;
     }
 
