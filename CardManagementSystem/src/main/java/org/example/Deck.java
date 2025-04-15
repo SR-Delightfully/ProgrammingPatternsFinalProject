@@ -3,14 +3,14 @@ package org.example;
 import java.util.LinkedList;
 
 public class Deck {
-    private int deckID;
+    private String deckID;
     private GameType deckType;
     private LinkedList<Card> cardList;
 
     // Adding constructors:
     //------------------------------------------------------------------------------------------------------------------
     // All-Argument constructor:
-    public Deck(int deckID, GameType deckType) {
+    public Deck(String deckID, GameType deckType) {
         this.deckID = deckID;
         this.deckType = deckType;
         this.cardList = new LinkedList<>();
@@ -18,7 +18,7 @@ public class Deck {
 
     // No-Argument constructor:
     public Deck() {
-        deckID = 0;
+        deckID = "";
         deckType = null;
         cardList = new LinkedList<>();
     }
@@ -34,14 +34,14 @@ public class Deck {
      * @param price refers to the average price of the card.
      * @return a new card with the given information.
      */
-    public Card createNewDeck(int deckID, GameType deckType) {
+    public Deck createNewDeck(String deckID, GameType deckType) {
         return new Deck(deckID, deckType);
     }
     /**
      * Method to edit an existing card instance's information.
      * @param cardID refers the identifying number of the user instance.
      */
-    public void editDeck(int deckID){
+    public void editDeck(String deckID){
         //TODO: apply logic to edit a deck.
     }
     /**
@@ -53,11 +53,11 @@ public class Deck {
     }
     // Adding Getters and Setters
     //------------------------------------------------------------------------------------------------------------------
-    public int getDeckID() {
+    public String getDeckID() {
         return deckID;
     }
 
-    public void setDeckID(int deckID) {
+    public void setDeckID(String deckID) {
         this.deckID = deckID;
     }
 

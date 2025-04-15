@@ -3,7 +3,7 @@ package org.example;
 import java.util.LinkedList;
 
 public class User {
-    private int userID;
+    private String userID;
     private String userName;
     private String emailAddress;
     private String password;
@@ -13,7 +13,7 @@ public class User {
     // Adding constructors:
     //------------------------------------------------------------------------------------------------------------------
     // All-Argument constructor:
-    public User(int userID, String userName, String emailAddress, String password, LinkedList<Card> cardList, LinkedList<Deck> deckList) {
+    public User(String userID, String userName, String emailAddress, String password, LinkedList<Card> cardList, LinkedList<Deck> deckList) {
         this.userID = userID;
         this.userName = userName;
         this.emailAddress = emailAddress;
@@ -24,7 +24,7 @@ public class User {
 
     // No-Argument constructor:
     public User() {
-        userID = 0;
+        userID = "";
         userName = "";
         emailAddress = "";
         password = "";
@@ -44,7 +44,7 @@ public class User {
      * @param deckList refers to the many sub-collections of cards that the user may have.
      * @return a new user with the given information.
      */
-    public User createNewUser(int userID, String userName, String emailAddress, String password, LinkedList<Card> cardList, LinkedList<Deck> deckList) {
+    public User createNewUser(String userID, String userName, String emailAddress, String password, LinkedList<Card> cardList, LinkedList<Deck> deckList) {
         User user = new User(userID, userName, emailAddress, password, cardList, deckList);
         return user;
     }
@@ -67,11 +67,11 @@ public class User {
 
     // Adding Getters and Setters
     //------------------------------------------------------------------------------------------------------------------
-    public int getUserID() {
+    public String getUserID() {
         return userID;
     }
 
-    public void setUserID(int userID) {
+    public void setUserID(String userID) {
         this.userID = userID;
     }
 
