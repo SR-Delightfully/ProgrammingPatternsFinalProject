@@ -11,6 +11,9 @@ public class CardMTG extends Card {
     private String[] manaCost;
     private String[] abilities;
 
+    // Adding constructors:
+    //------------------------------------------------------------------------------------------------------------------
+    // All-Argument constructor:s
     public CardMTG(int power, int toughness, String cardType,
                    String[] colors, String[] manaCost, String[] abilities) {
         super();
@@ -22,6 +25,7 @@ public class CardMTG extends Card {
         this.abilities = abilities;
     }
 
+    // No-Argument constructor:
     public CardMTG() {
         super();
         power = 0;
@@ -32,6 +36,11 @@ public class CardMTG extends Card {
         abilities = new String[0];
     }
 
+    // Adding Methods:
+    //------------------------------------------------------------------------------------------------------------------
+
+    // Adding Getters and Setters
+    //------------------------------------------------------------------------------------------------------------------
     public String[] getAbilities() {
         return abilities;
     }
@@ -88,6 +97,21 @@ public class CardMTG extends Card {
         this.power = power;
     }
 
+    // Adding Equals & Hashmap:
+    //------------------------------------------------------------------------------------------------------------------
+    public boolean equals(Object object) {
+        if (object == null || getClass() != object.getClass()) return false;
+        if (!super.equals(object)) return false;
+        CardMTG cardMTG = (CardMTG) object;
+        return power == cardMTG.power && toughness == cardMTG.toughness && hasBackside == cardMTG.hasBackside && java.util.Objects.equals(cardType, cardMTG.cardType) && java.util.Objects.deepEquals(colors, cardMTG.colors) && java.util.Objects.deepEquals(manaCost, cardMTG.manaCost) && java.util.Objects.deepEquals(abilities, cardMTG.abilities);
+    }
+
+    public int hashCode() {
+        return java.util.Objects.hash(super.hashCode(), power, toughness, hasBackside, cardType, java.util.Arrays.hashCode(colors), java.util.Arrays.hashCode(manaCost), java.util.Arrays.hashCode(abilities));
+    }
+
+    // Adding toString method:
+    //------------------------------------------------------------------------------------------------------------------
     @Override
     public String toString() {
         return "CardMTG{" +

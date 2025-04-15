@@ -10,6 +10,9 @@ public class CardPOKEMON extends Card {
     public String[] types;
     public int stage;
 
+    // Adding constructors:
+    //------------------------------------------------------------------------------------------------------------------
+    // All-Argument constructor:
     public CardPOKEMON(int health, String weakness, String resistance,
                        boolean retreat, String[] types, int stage) {
         super();
@@ -21,6 +24,7 @@ public class CardPOKEMON extends Card {
         this.stage = stage;
     }
 
+    // No-Argument constructor:
     public CardPOKEMON() {
         super();
         health = 0;
@@ -31,6 +35,11 @@ public class CardPOKEMON extends Card {
         stage = 0;
     }
 
+    // Adding Methods:
+    //------------------------------------------------------------------------------------------------------------------
+
+    // Adding Getters and Setters
+    //------------------------------------------------------------------------------------------------------------------
     public int getStage() {
         return stage;
     }
@@ -79,6 +88,21 @@ public class CardPOKEMON extends Card {
         this.health = health;
     }
 
+    // Adding Equals & Hashmap:
+    //------------------------------------------------------------------------------------------------------------------
+    public boolean equals(Object object) {
+        if (object == null || getClass() != object.getClass()) return false;
+        if (!super.equals(object)) return false;
+        CardPOKEMON that = (CardPOKEMON) object;
+        return health == that.health && retreat == that.retreat && stage == that.stage && java.util.Objects.equals(weakness, that.weakness) && java.util.Objects.equals(resistance, that.resistance) && java.util.Objects.deepEquals(types, that.types);
+    }
+
+    public int hashCode() {
+        return java.util.Objects.hash(super.hashCode(), health, weakness, resistance, retreat, java.util.Arrays.hashCode(types), stage);
+    }
+
+    // Adding toString method:
+    //------------------------------------------------------------------------------------------------------------------
     @Override
     public String toString() {
         return "CardPOKEMON{" +
