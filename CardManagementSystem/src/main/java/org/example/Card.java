@@ -33,6 +33,34 @@ public abstract class Card {
     }
     // Adding Methods:
     //------------------------------------------------------------------------------------------------------------------
+    /**
+     * Method to facilitate the process of creating a new instance of the Card class.
+     * @param cardID refers to the reference number of the card's instance.
+     * @param gameType refers to the game associated with the card.
+     * @param cardName refers to the name of the card.
+     * @param description refers to the descript of the card.
+     * @param releaseYear refers to the year in which the card was first released.
+     * @param price refers to the average price of the card.
+     * @return a new card with the given information.
+     */
+    public Card createNewCard(int cardID, GameType gameType, String cardName,
+                              String description, int releaseYear, double price) {
+        return new Card(cardID, gameType, cardName,description, releaseYear, price);
+    }
+    /**
+     * Method to edit an existing card instance's information.
+     * @param cardID refers the identifying number of the user instance.
+     */
+    public void editCard(int cardID){
+        //TODO: apply logic to edit a card.
+    }
+    /**
+     * Method to find and delete a card instance.
+     * @param cardID refers the identifying number of the card instance.
+     */
+    public void deleteCard(int cardID) {
+        //TODO: apply logic to remove a card.
+    }
 
     // Adding Getters and Setters
     //------------------------------------------------------------------------------------------------------------------

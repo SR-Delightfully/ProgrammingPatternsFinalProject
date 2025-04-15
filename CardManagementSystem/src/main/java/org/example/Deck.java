@@ -5,7 +5,7 @@ import java.util.LinkedList;
 public class Deck {
     private int deckID;
     private GameType deckType;
-    LinkedList<Card> cardList;
+    private LinkedList<Card> cardList;
 
     // Adding constructors:
     //------------------------------------------------------------------------------------------------------------------
@@ -13,7 +13,7 @@ public class Deck {
     public Deck(int deckID, GameType deckType) {
         this.deckID = deckID;
         this.deckType = deckType;
-        cardList = new LinkedList<>();
+        this.cardList = new LinkedList<>();
     }
 
     // No-Argument constructor:
@@ -24,7 +24,33 @@ public class Deck {
     }
     // Adding Methods:
     //------------------------------------------------------------------------------------------------------------------
-
+    /**
+     * Method to facilitate the process of creating a new instance of the Card class.
+     * @param cardID refers to the reference number of the card's instance.
+     * @param gameType refers to the game associated with the card.
+     * @param cardName refers to the name of the card.
+     * @param description refers to the descript of the card.
+     * @param releaseYear refers to the year in which the card was first released.
+     * @param price refers to the average price of the card.
+     * @return a new card with the given information.
+     */
+    public Card createNewDeck(int deckID, GameType deckType) {
+        return new Deck(deckID, deckType);
+    }
+    /**
+     * Method to edit an existing card instance's information.
+     * @param cardID refers the identifying number of the user instance.
+     */
+    public void editDeck(int deckID){
+        //TODO: apply logic to edit a deck.
+    }
+    /**
+     * Method to find and delete a deck instance.
+     * @param deckID refers the identifying number of the deck instance.
+     */
+    public void deleteDeck(int deckID) {
+        //TODO: apply logic to remove a deck.
+    }
     // Adding Getters and Setters
     //------------------------------------------------------------------------------------------------------------------
     public int getDeckID() {

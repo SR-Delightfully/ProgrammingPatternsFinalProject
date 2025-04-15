@@ -42,7 +42,7 @@ public class User {
      * @param password refers to the user's password which will be required to access & edit the user's information.
      * @param cardList refers to the list of all the cards that the user has in their collections.
      * @param deckList refers to the many sub-collections of cards that the user may have.
-     * @return
+     * @return a new user with the given information.
      */
     public User createNewUser(int userID, String userName, String emailAddress, String password, LinkedList<Card> cardList, LinkedList<Deck> deckList) {
         return new User(userID, userName, emailAddress, password, cardList, deckList);
@@ -61,7 +61,7 @@ public class User {
      * @param userID refers the identifying number of the user instance.
      */
     public void deleteUser(int userID) {
-        //TODO: apply logic t remove a user.
+        //TODO: apply logic to remove a user.
     }
 
     // Adding Getters and Setters
