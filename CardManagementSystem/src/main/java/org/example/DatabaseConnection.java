@@ -11,12 +11,10 @@ public class DatabaseConnection {
      * @return a Connection object to the database
      */
     public static Connection connect() {
-        String basePath = "jdbc:sqlite:src/main/resources/database/";
-
-        String dbBasePath = basePath + "data.db";
+        String dbPath = "jdbc:sqlite:data.db";
         Connection connection;
         try {
-            connection = DriverManager.getConnection(dbBasePath);
+            connection = DriverManager.getConnection(dbPath);
             System.out.println("Connected to database!");
         }
         catch (SQLException e) {
