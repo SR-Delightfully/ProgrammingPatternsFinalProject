@@ -17,8 +17,10 @@ public class DatabaseConnection {
         Connection connection;
         try {
             connection = DriverManager.getConnection(dbBasePath);
+            System.out.println("Connected to database!");
         }
         catch (SQLException e) {
+            System.out.println(e.getMessage());
             throw new RuntimeException(e);
         }
         return connection;
