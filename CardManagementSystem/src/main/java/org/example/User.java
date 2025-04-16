@@ -45,25 +45,9 @@ public class User {
      * @return a new user with the given information.
      */
     public User createNewUser(String userID, String userName, String emailAddress, String password, LinkedList<Card> cardList, LinkedList<Deck> deckList) {
-        User user = new User(userID, userName, emailAddress, password, cardList, deckList);
-        return user;
+        return new User(userID, userName, emailAddress, password, cardList, deckList);
     }
 
-    /**
-     * Method to edit an existing user instance's information.
-     * @param userID refers the identifying number of the user instance.
-     */
-    public void editUser(int userID){
-        //TODO: apply logic to edit a user.
-    }
-
-    /**
-     * Method to find and delete a user instance.
-     * @param userID refers the identifying number of the user instance.
-     */
-    public void deleteUser(int userID) {
-        //TODO: apply logic to remove a user.
-    }
 
     // Adding Getters and Setters
     //------------------------------------------------------------------------------------------------------------------

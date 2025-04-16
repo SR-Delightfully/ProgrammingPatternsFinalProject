@@ -47,13 +47,7 @@ public class Card {
                               String description, int releaseYear, double price) {
         return new Card(cardID, gameType, cardName,description, releaseYear, price);
     }
-    /**
-     * Method to edit an existing card instance's information.
-     * @param cardID refers the identifying number of the user instance.
-     */
-    public void editCard(int cardID){
-        //TODO: apply logic to edit a card.
-    }
+
 
 
     // Adding Getters and Setters

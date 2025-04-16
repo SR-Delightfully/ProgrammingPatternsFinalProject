@@ -24,33 +24,17 @@ public class Deck {
     }
     // Adding Methods:
     //------------------------------------------------------------------------------------------------------------------
+
     /**
-     * Method to facilitate the process of creating a new instance of the Card class.
-     * @param cardID refers to the reference number of the card's instance.
-     * @param gameType refers to the game associated with the card.
-     * @param cardName refers to the name of the card.
-     * @param description refers to the descript of the card.
-     * @param releaseYear refers to the year in which the card was first released.
-     * @param price refers to the average price of the card.
-     * @return a new card with the given information.
+     *
+     * @param deckID unique identifier to identify different decks
+     * @param deckType declares what type of Card game the deck is made for
+     * @return a new Deck object
      */
     public Deck createNewDeck(String deckID, GameType deckType) {
         return new Deck(deckID, deckType);
     }
-    /**
-     * Method to edit an existing card instance's information.
-     * @param cardID refers the identifying number of the user instance.
-     */
-    public void editDeck(String deckID){
-        //TODO: apply logic to edit a deck.
-    }
-    /**
-     * Method to find and delete a deck instance.
-     * @param deckID refers the identifying number of the deck instance.
-     */
-    public void deleteDeck(int deckID) {
-        //TODO: apply logic to remove a deck.
-    }
+
     // Adding Getters and Setters
     //------------------------------------------------------------------------------------------------------------------
     public String getDeckID() {
