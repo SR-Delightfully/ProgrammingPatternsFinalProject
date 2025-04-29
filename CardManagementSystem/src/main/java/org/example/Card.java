@@ -22,6 +22,13 @@ public class Card {
         this.price = price;
     }
 
+    public Card(String name, GameType gameType, String releaseDate, double price) {
+        this.name = name;
+        this.gameType = gameType;
+        this.releaseDate = releaseDate;
+        this.price = price;
+    }
+
     // No-Argument constructor:
     public Card() {
         id = "";

@@ -1,6 +1,8 @@
 package org.example;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Database {
     private DatabaseConnection dbConnection;
@@ -42,7 +44,6 @@ public class Database {
             );
         """);
 
-            System.out.println("Tables 'cards', 'users', and 'decks' are ready.");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -90,6 +91,33 @@ public class Database {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public List<Card> getAllCards() {
+        List<Card> cards = new ArrayList<>();
+        String sql = "SELECT * FROM cards";
+
+        try (Connection connection = dbConnection.getConnection();
+             PreparedStatement stmt = connection.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+             while (rs.next()) {
+                 String id = rs.getString("id");
+                 String gameTypeStr = rs.getString("game_type");
+                 String name = rs.getString("name");
+                 String description = rs.getString("description");
+                 String releaseDate = rs.getString("release_date");
+                 double price = rs.getDouble("price");
+
+                 GameType gameType = GameType.valueOf(gameTypeStr.toUpperCase());
+
+                 Card card = new Card(id, gameType, name, description, releaseDate, price);
+                 cards.add(card);
+             }
+        } catch (SQLException e) {
+                 e.printStackTrace();
+        }
+        return cards;
     }
 
     public void updateCard(String cardID, Card updatedCard) {
