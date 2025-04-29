@@ -3,20 +3,21 @@ package org.example;
 import java.util.Arrays;
 
 public class CardMTG extends Card {
+    private String text;
+    private String type;
+    private String[] colors;
+    private String manaCost;
     private int power;
     private int toughness;
-    private boolean hasBackside;
     private String cardType;
-    private String[] colors;
-    private String[] manaCost;
     private String[] abilities;
 
     // Adding constructors:
     //------------------------------------------------------------------------------------------------------------------
     // All-Argument constructor:s
-    public CardMTG(int power, int toughness, String cardType,
-                   String[] colors, String[] manaCost, String[] abilities) {
-        super();
+    public CardMTG(  String id, GameType gameType, String name,String description, String releaseDate, double price, String text, String type,
+                     String[] colors, String manaCost, int power, int toughness, String cardType, String[] abilities) {
+        super(id, gameType, name, description, releaseDate, price);
         this.power = power;
         this.toughness = toughness;
         this.cardType = cardType;
@@ -32,7 +33,7 @@ public class CardMTG extends Card {
         toughness = 0;
         cardType = "";
         colors = new String[0];
-        manaCost = new String[0];
+        manaCost = "";
         abilities = new String[0];
     }
 
@@ -49,11 +50,11 @@ public class CardMTG extends Card {
         this.abilities = abilities;
     }
 
-    public String[] getManaCost() {
+    public String getManaCost() {
         return manaCost;
     }
 
-    public void setManaCost(String[] manaCost) {
+    public void setManaCost(String manaCost) {
         this.manaCost = manaCost;
     }
 
@@ -71,14 +72,6 @@ public class CardMTG extends Card {
 
     public void setCardType(String cardType) {
         this.cardType = cardType;
-    }
-
-    public boolean isHasBackside() {
-        return hasBackside;
-    }
-
-    public void setHasBackside(boolean hasBackside) {
-        this.hasBackside = hasBackside;
     }
 
     public int getToughness() {
@@ -103,11 +96,11 @@ public class CardMTG extends Card {
         if (object == null || getClass() != object.getClass()) return false;
         if (!super.equals(object)) return false;
         CardMTG cardMTG = (CardMTG) object;
-        return power == cardMTG.power && toughness == cardMTG.toughness && hasBackside == cardMTG.hasBackside && java.util.Objects.equals(cardType, cardMTG.cardType) && java.util.Objects.deepEquals(colors, cardMTG.colors) && java.util.Objects.deepEquals(manaCost, cardMTG.manaCost) && java.util.Objects.deepEquals(abilities, cardMTG.abilities);
+        return power == cardMTG.power && toughness == cardMTG.toughness && java.util.Objects.equals(cardType, cardMTG.cardType) && java.util.Objects.deepEquals(colors, cardMTG.colors) && java.util.Objects.deepEquals(manaCost, cardMTG.manaCost) && java.util.Objects.deepEquals(abilities, cardMTG.abilities);
     }
 
     public int hashCode() {
-        return java.util.Objects.hash(super.hashCode(), power, toughness, hasBackside, cardType, java.util.Arrays.hashCode(colors), java.util.Arrays.hashCode(manaCost), java.util.Arrays.hashCode(abilities));
+        return java.util.Objects.hash(super.hashCode(), power, toughness, cardType, java.util.Arrays.hashCode(colors), java.util.Arrays.hashCode(abilities));
     }
 
     // Adding toString method:
@@ -117,10 +110,9 @@ public class CardMTG extends Card {
         return "CardMTG{" +
                 "power=" + power +
                 ", toughness=" + toughness +
-                ", hasBackside=" + hasBackside +
                 ", cardType='" + cardType + '\'' +
                 ", colors=" + Arrays.toString(colors) +
-                ", manaCost=" + Arrays.toString(manaCost) +
+                ", manaCost=" + manaCost +
                 ", abilities=" + Arrays.toString(abilities) +
                 '}';
     }

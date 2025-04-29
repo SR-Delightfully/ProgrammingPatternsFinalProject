@@ -2,33 +2,33 @@ package org.example;
 
 
 public class Card {
-    private String cardID;
+    private String id;
     private GameType gameType;
-    private String cardName;
+    private String name;
     private String description;
-    private int releaseYear;
+    private String releaseDate;
     private double price;
 
     // Adding constructors:
     //------------------------------------------------------------------------------------------------------------------
     // All-Argument constructor:
-    public Card(String cardID, GameType gameType, String cardName,
-                String description, int releaseYear, double price) {
-        this.cardID = cardID;
+    public Card(String id, GameType gameType, String name,
+                String description, String releaseDate, double price) {
+        this.id = id;
         this.gameType = gameType;
-        this.cardName = cardName;
+        this.name = name;
         this.description = description;
-        this.releaseYear = releaseYear;
+        this.releaseDate = releaseDate;
         this.price = price;
     }
 
     // No-Argument constructor:
     public Card() {
-        cardID = "";
+        id = "";
         gameType = null;
-        cardName = null;
+        name = null;
         description = null;
-        releaseYear = 0;
+        releaseDate = null;
         price = 0.00;
     }
     // Adding Methods:
@@ -39,25 +39,25 @@ public class Card {
      * @param gameType refers to the game associated with the card.
      * @param cardName refers to the name of the card.
      * @param description refers to the description of the card.
-     * @param releaseYear refers to the year in which the card was first released.
+     * @param releaseDate refers to the year in which the card was first released.
      * @param price refers to the average price of the card.
      * @return a new card with the given information.
      */
     public Card createNewCard(String cardID, GameType gameType, String cardName,
-                              String description, int releaseYear, double price) {
-        return new Card(cardID, gameType, cardName,description, releaseYear, price);
+                              String description, String releaseDate, double price) {
+        return new Card(cardID, gameType, cardName,description, releaseDate, price);
     }
 
 
 
     // Adding Getters and Setters
     //------------------------------------------------------------------------------------------------------------------
-    public String getCardID() {
-        return cardID;
+    public String getId() {
+        return id;
     }
 
-    public void setCardID(String cardID) {
-        this.cardID = cardID;
+    public void setId(String cardID) {
+        this.id = cardID;
     }
 
     public GameType getGameType() {
@@ -69,11 +69,11 @@ public class Card {
     }
 
     public String getCardName() {
-        return cardName;
+        return name;
     }
 
     public void setCardName(String cardName) {
-        this.cardName = cardName;
+        this.name = cardName;
     }
 
     public String getDescription() {
@@ -84,12 +84,12 @@ public class Card {
         this.description = description;
     }
 
-    public int getReleaseYear() {
-        return releaseYear;
+    public String getReleaseDate() {
+        return releaseDate;
     }
 
-    public void setReleaseYear(int releaseYear) {
-        this.releaseYear = releaseYear;
+    public void setReleaseDate(String releaseDate) {
+        this.releaseDate = releaseDate;
     }
 
     public double getPrice() {
@@ -107,11 +107,11 @@ public class Card {
         if (object == null || getClass() != object.getClass()) return false;
         if (!super.equals(object)) return false;
         Card card = (Card) object;
-        return cardID == card.cardID && releaseYear == card.releaseYear && java.lang.Double.compare(price, card.price) == 0 && java.util.Objects.equals(gameType, card.gameType) && java.util.Objects.equals(cardName, card.cardName) && java.util.Objects.equals(description, card.description);
+        return id == card.id && releaseDate == card.releaseDate && java.lang.Double.compare(price, card.price) == 0 && java.util.Objects.equals(gameType, card.gameType) && java.util.Objects.equals(name, card.name) && java.util.Objects.equals(description, card.description);
     }
 
     public int hashCode() {
-        return java.util.Objects.hash(super.hashCode(), cardID, gameType, cardName, description, releaseYear, price);
+        return java.util.Objects.hash(super.hashCode(), id, gameType, name, description, releaseDate, price);
     }
 
     // Adding toString method:
@@ -119,11 +119,11 @@ public class Card {
     @Override
     public String toString() {
         return "Card{" +
-                "cardID=" + cardID +
+                "cardID=" + id +
                 ", gameType=" + gameType +
-                ", cardName='" + cardName + '\'' +
+                ", cardName='" + name + '\'' +
                 ", description='" + description + '\'' +
-                ", releaseYear=" + releaseYear +
+                ", releaseYear=" + releaseDate +
                 ", price=" + price +
                 '}';
     }

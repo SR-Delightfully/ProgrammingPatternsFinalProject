@@ -9,16 +9,35 @@ public class Database {
         this.dbConnection = dbConnection;
     }
 
+    public static void initializeDatabase() {
+        try (Connection conn = DriverManager.getConnection("jdbc:sqlite:cards.db")) {
+            Statement stmt = conn.createStatement();
+            stmt.executeUpdate("""
+                CREATE TABLE IF NOT EXISTS cards (
+                    cardID TEXT PRIMARY KEY,
+                    gameType TEXT,
+                    cardName TEXT,
+                    description TEXT,
+                    releaseYear INTEGER,
+                    price REAL
+                );
+            """);
+            System.out.println("Table 'cards' is ready.");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     // --------- CRUD Operations for Card ---------
 
     public void addCard(Card card) {
         String sql = "INSERT INTO cards (cardID, gameType, cardName, description, releaseYear, price) VALUES (?, ?, ?, ?, ?, ?)";
         try (PreparedStatement pstmt = dbConnection.getConnection().prepareStatement(sql)) {
-            pstmt.setString(1, card.getCardID());
+            pstmt.setString(1, card.getId());
             pstmt.setString(2, card.getGameType().toString());  // Assuming GameType is an Enum
             pstmt.setString(3, card.getCardName());
             pstmt.setString(4, card.getDescription());
-            pstmt.setInt(5, card.getReleaseYear());
+            pstmt.setString(5, card.getReleaseDate());
             pstmt.setDouble(6, card.getPrice());
             pstmt.executeUpdate();
         } catch (SQLException e) {
@@ -31,7 +50,7 @@ public class Database {
         try (PreparedStatement pstmt = dbConnection.getConnection().prepareStatement(sql)) {
             pstmt.setString(1, updatedCard.getCardName());
             pstmt.setString(2, updatedCard.getDescription());
-            pstmt.setInt(3, updatedCard.getReleaseYear());
+            pstmt.setString(3, updatedCard.getReleaseDate());
             pstmt.setDouble(4, updatedCard.getPrice());
             pstmt.setString(5, cardID);
             pstmt.executeUpdate();
