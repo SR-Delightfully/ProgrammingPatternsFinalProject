@@ -109,7 +109,7 @@ public class GUI {
             } else {
                 errorLabel.setText("");
                 JOptionPane.showMessageDialog(frame, "Login successful (mock)!");
-                showWelcomeScreen();
+                showMainGUI();
             }
         });
 
@@ -177,7 +177,7 @@ public class GUI {
             } else {
                 errorLabel.setText("");
                 JOptionPane.showMessageDialog(frame, "Signup successful (mock)!");
-                showWelcomeScreen();
+                showMainGUI();
             }
         });
 
@@ -213,6 +213,27 @@ public class GUI {
     private boolean isValidEmail(String email) {
         // Basic email validation regex
         return email.matches("^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$");
+    }
+
+    // can be changed later to our design...
+    private void showMainGUI() {
+        JPanel root = new JPanel(new BorderLayout());
+        root.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+
+        JLabel label = new JLabel("Welcome to the Main App Screen!");
+        label.setFont(new Font("Arial", Font.BOLD, 20));
+        label.setHorizontalAlignment(SwingConstants.CENTER);
+
+        JButton logout = new JButton("Logout");
+        logout.addActionListener(e -> showWelcomeScreen());
+
+        root.add(label, BorderLayout.CENTER);
+        root.add(logout, BorderLayout.SOUTH);
+
+        frame.setContentPane(root);
+        frame.setSize(500, 400);
+        frame.revalidate();
+        frame.repaint();
     }
 
     public static void main(String[] args) {
