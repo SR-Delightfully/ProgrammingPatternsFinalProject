@@ -18,8 +18,8 @@ public class User {
         this.userName = userName;
         this.emailAddress = emailAddress;
         this.password = password;
-        cardList = new LinkedList<>();
-        deckList = new LinkedList<>();
+        this.cardList = cardList;
+        this.deckList = deckList;
     }
 
     // No-Argument constructor:

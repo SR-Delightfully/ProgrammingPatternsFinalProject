@@ -25,15 +25,7 @@ public class Deck {
     // Adding Methods:
     //------------------------------------------------------------------------------------------------------------------
 
-    /**
-     *
-     * @param deckID unique identifier to identify different decks
-     * @param deckType declares what type of Card game the deck is made for
-     * @return a new Deck object
-     */
-    public Deck createNewDeck(String deckID, GameType deckType) {
-        return new Deck(deckID, deckType);
-    }
+
 
     // Adding Getters and Setters
     //------------------------------------------------------------------------------------------------------------------

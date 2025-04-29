@@ -5,23 +5,33 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class DatabaseConnection {
+    private static final String DB_URL = "jdbc:sqlite:data.db";
+    private Connection connection;
 
-    /**
-     * connects to the SQLite database
-     * @return a Connection object to the database
-     */
-    public static Connection connect() {
-        String dbPath = "jdbc:sqlite:data.db";
-        Connection connection;
+    public DatabaseConnection() {
+        this.connection = createConnection();
+    }
+
+    public Connection createConnection() {
         try {
-            connection = DriverManager.getConnection(dbPath);
-            System.out.println("Connected to database!");
+            return DriverManager.getConnection(DB_URL);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Failed to connect to the database.");
         }
-        catch (SQLException e) {
-            System.out.println(e.getMessage());
-            throw new RuntimeException(e);
-        }
+    }
+
+    public Connection getConnection() {
         return connection;
     }
 
+    public void closeConnection() {
+        try {
+            if (connection != null && !connection.isClosed()) {
+                connection.close();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }
