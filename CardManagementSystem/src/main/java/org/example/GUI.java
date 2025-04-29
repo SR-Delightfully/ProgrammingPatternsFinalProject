@@ -1,110 +1,163 @@
 package org.example;
 
-import javafx.application.Application;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.Scene;
-import javafx.scene.control.*;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
-import javafx.scene.text.Font;
-import javafx.scene.paint.Color;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
-public class GUI extends Application {
+public class GUI {
 
-    private Stage primaryStage;
+    private JFrame frame;
 
-    @Override
-    public void start(Stage stage) {
-        this.primaryStage = stage;
+    public GUI() {
+        frame = new JFrame("Card Collector");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         showWelcomeScreen();
+        frame.setVisible(true);
     }
 
     private void showWelcomeScreen() {
-        Label title = new Label("Welcome to Card Collector");
-        title.setFont(new Font("Arial", 24));
-        title.setTextFill(Color.DARKBLUE);
+        JLabel title = new JLabel("Welcome to Card Collector");
+        title.setFont(new Font("Arial", Font.BOLD, 24));
+        title.setForeground(new Color(0, 0, 139));
+        title.setHorizontalAlignment(SwingConstants.CENTER);
 
-        VBox loginCard = new VBox();
-        loginCard.setOnMouseClicked(e -> showLoginScreen());
+        JPanel loginCard = createCard("Login", "login.png");
+        loginCard.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                showLoginScreen();
+            }
+        });
 
-        VBox signupCard = new VBox();
-        signupCard.setOnMouseClicked(e -> showSignupScreen());
+        JPanel signupCard = createCard("Sign Up", "signup.png");
+        signupCard.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                showSignupScreen();
+            }
+        });
 
-        HBox cards = new HBox(40, loginCard, signupCard);
-        cards.setAlignment(Pos.CENTER);
+        JPanel cards = new JPanel(new FlowLayout(FlowLayout.CENTER, 40, 0));
+        cards.add(loginCard);
+        cards.add(signupCard);
 
-        VBox root = new VBox(40, title, cards);
-        root.setAlignment(Pos.CENTER);
-        root.setPadding(new Insets(50));
+        JPanel root = new JPanel();
+        root.setLayout(new BorderLayout(0, 40));
+        root.setBorder(BorderFactory.createEmptyBorder(50, 50, 50, 50));
+        root.add(title, BorderLayout.NORTH);
+        root.add(cards, BorderLayout.CENTER);
 
-        Scene scene = new Scene(root, 500, 400);
-        primaryStage.setScene(scene);
-        primaryStage.setTitle("Card Collector - Welcome");
-        primaryStage.show();
+        frame.setContentPane(root);
+        frame.setSize(500, 400);
+        frame.revalidate();
+        frame.repaint();
     }
 
-    private VBox createCard(String text) {
-        Label label = new Label(text);
-        label.setFont(Font.font("Arial", 16));
-        VBox card = new VBox(label);
-        card.setAlignment(Pos.CENTER);
-        card.setPadding(new Insets(20));
-        card.setStyle("-fx-border-color: black; -fx-border-width: 2; -fx-background-color: lightgray;");  // Styled card
+    private JPanel createCard(String text, String imagePath) {
+        JLabel label = new JLabel(text);
+        label.setFont(new Font("Arial", Font.PLAIN, 16));
+        label.setHorizontalAlignment(SwingConstants.CENTER);
+
+        JLabel imageLabel = new JLabel();
+        ImageIcon icon = new ImageIcon(imagePath);
+        Image scaledImage = icon.getImage().getScaledInstance(80, 80, Image.SCALE_SMOOTH);
+        imageLabel.setIcon(new ImageIcon(scaledImage));
+
+        JPanel card = new JPanel();
+        card.setLayout(new BoxLayout(card, BoxLayout.Y_AXIS));
+        card.setPreferredSize(new Dimension(150, 150));
+        card.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
+        card.setBackground(Color.LIGHT_GRAY);
+        card.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        card.add(Box.createVerticalStrut(10));
+        card.add(imageLabel);
+        card.add(Box.createVerticalStrut(10));
+        card.add(label);
+
         return card;
     }
 
     private void showLoginScreen() {
-        Label header = new Label("Login");
-        header.setFont(Font.font("Arial", 20));
+        JPanel root = new JPanel();
+        root.setLayout(new BoxLayout(root, BoxLayout.Y_AXIS));
+        root.setBorder(BorderFactory.createEmptyBorder(30, 50, 30, 50));
 
-        TextField username = new TextField();
-        username.setPromptText("Username");
+        JLabel header = new JLabel("Login");
+        header.setFont(new Font("Arial", Font.BOLD, 20));
+        header.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        PasswordField password = new PasswordField();
-        password.setPromptText("Password");
+        JLabel userLabel = new JLabel("Username:");
+        JTextField username = new JTextField(15);
 
-        Button login = new Button("Log In");
-        Button back = new Button("Back");
-        back.setOnAction(e -> showWelcomeScreen());
+        JLabel passLabel = new JLabel("Password:");
+        JPasswordField password = new JPasswordField(15);
 
-        VBox root = new VBox(10, header, username, password, login, back);
-        root.setAlignment(Pos.CENTER);
-        root.setPadding(new Insets(30));
+        JButton login = new JButton("Log In");
+        JButton back = new JButton("Back");
+        back.addActionListener(e -> showWelcomeScreen());
 
-        Scene scene = new Scene(root, 400, 300);
-        primaryStage.setScene(scene);
-        primaryStage.setTitle("Card Collector - Login");
+        root.add(header);
+        root.add(Box.createVerticalStrut(15));
+        root.add(userLabel);
+        root.add(username);
+        root.add(Box.createVerticalStrut(10));
+        root.add(passLabel);
+        root.add(password);
+        root.add(Box.createVerticalStrut(15));
+        root.add(login);
+        root.add(Box.createVerticalStrut(10));
+        root.add(back);
+
+        frame.setContentPane(root);
+        frame.setSize(400, 300);
+        frame.revalidate();
+        frame.repaint();
     }
 
     private void showSignupScreen() {
-        Label header = new Label("Sign Up");
-        header.setFont(Font.font("Arial", 20));
+        JPanel root = new JPanel();
+        root.setLayout(new BoxLayout(root, BoxLayout.Y_AXIS));
+        root.setBorder(BorderFactory.createEmptyBorder(30, 50, 30, 50));
 
-        TextField username = new TextField();
-        username.setPromptText("Username");
+        JLabel header = new JLabel("Sign Up");
+        header.setFont(new Font("Arial", Font.BOLD, 20));
+        header.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        PasswordField password = new PasswordField();
-        password.setPromptText("Password");
+        JLabel userLabel = new JLabel("Username:");
+        JTextField username = new JTextField(15);
 
-        PasswordField confirmPassword = new PasswordField();
-        confirmPassword.setPromptText("Confirm Password");
+        JLabel passLabel = new JLabel("Password:");
+        JPasswordField password = new JPasswordField(15);
 
-        Button signup = new Button("Sign Up");
-        Button back = new Button("Back");
-        back.setOnAction(e -> showWelcomeScreen());
+        JLabel confirmLabel = new JLabel("Confirm Password:");
+        JPasswordField confirmPassword = new JPasswordField(15);
 
-        VBox root = new VBox(10, header, username, password, confirmPassword, signup, back);
-        root.setAlignment(Pos.CENTER);
-        root.setPadding(new Insets(30));
+        JButton signup = new JButton("Sign Up");
+        JButton back = new JButton("Back");
+        back.addActionListener(e -> showWelcomeScreen());
 
-        Scene scene = new Scene(root, 400, 350);
-        primaryStage.setScene(scene);
-        primaryStage.setTitle("Card Collector - Sign Up");
+        root.add(header);
+        root.add(Box.createVerticalStrut(15));
+        root.add(userLabel);
+        root.add(username);
+        root.add(Box.createVerticalStrut(10));
+        root.add(passLabel);
+        root.add(password);
+        root.add(Box.createVerticalStrut(10));
+        root.add(confirmLabel);
+        root.add(confirmPassword);
+        root.add(Box.createVerticalStrut(15));
+        root.add(signup);
+        root.add(Box.createVerticalStrut(10));
+        root.add(back);
+
+        frame.setContentPane(root);
+        frame.setSize(400, 350);
+        frame.revalidate();
+        frame.repaint();
     }
 
     public static void main(String[] args) {
-        launch(args);
+        SwingUtilities.invokeLater(() -> new GUI());
     }
 }
