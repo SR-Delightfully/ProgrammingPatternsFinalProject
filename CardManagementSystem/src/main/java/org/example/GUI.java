@@ -5,16 +5,19 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.net.URL;
+import java.util.LinkedList;
 
 public class GUI {
 
     private JFrame frame;
+    private final Database database;
 
-    public GUI() {
+    public GUI(Database database) {
         frame = new JFrame("Card Collector");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        showWelcomeScreen();
         frame.setVisible(true);
+        showWelcomeScreen();
+        this.database = database;
     }
 
     private void showWelcomeScreen() {
@@ -104,14 +107,20 @@ public class GUI {
 
         JButton login = new JButton("Log In");
         login.addActionListener(e -> {
-            if (username.getText().trim().isEmpty() || password.getPassword().length == 0) {
+            String user = username.getText().trim();
+            String pass = new String(password.getPassword());
+
+            if (user.isEmpty() || pass.isEmpty()) {
                 errorLabel.setText("All fields are required.");
-            } else {
+            } else if (database.validateLogin(user, pass)) {
                 errorLabel.setText("");
-                JOptionPane.showMessageDialog(frame, "Login successful (mock)!");
-                showMainGUI();
+                JOptionPane.showMessageDialog(frame, "Login successful!");
+                showMainGUI(); // Replace with your actual main app screen
+            } else {
+                errorLabel.setText("Invalid username or password.");
             }
         });
+
 
         JButton back = new JButton("Back");
         back.addActionListener(e -> showWelcomeScreen());
@@ -174,12 +183,16 @@ public class GUI {
                 errorLabel.setText("Invalid email address.");
             } else if (!pass.equals(confirmPass)) {
                 errorLabel.setText("Passwords do not match.");
+            } else if (database.userExists(user)) {
+                errorLabel.setText("Username already exists.");
             } else {
-                errorLabel.setText("");
-                JOptionPane.showMessageDialog(frame, "Signup successful (mock)!");
-                showMainGUI();
+                String id = java.util.UUID.randomUUID().toString();
+                database.addUser(new User(id, user, mail, pass));
+                JOptionPane.showMessageDialog(frame, "Signup successful!");
+                showLoginScreen();
             }
         });
+
 
         JButton back = new JButton("Back");
         back.addActionListener(e -> showWelcomeScreen());
@@ -237,6 +250,20 @@ public class GUI {
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(GUI::new);
-    }
+        DatabaseConnection dbConn = new DatabaseConnection("jdbc:sqlite:cards.db");
+        dbConn.createConnection();
+
+
+        if (dbConn.getConnection() == null) {
+            System.out.println("Failed to establish a database connection.");
+            return;
+            }
+
+        Database.initializeDatabase();
+        Database db = new Database(dbConn);
+
+        SwingUtilities.invokeLater(() -> new GUI(db));
+        }
+
+
 }

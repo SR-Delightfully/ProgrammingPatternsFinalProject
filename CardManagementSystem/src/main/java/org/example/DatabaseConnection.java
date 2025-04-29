@@ -5,30 +5,36 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class DatabaseConnection {
-    private static final String DB_URL = "jdbc:sqlite:data.db";
+    private final String url;
     private Connection connection;
 
-    public DatabaseConnection() {
-        this.connection = createConnection();
+    // Constructor to set the URL
+    public DatabaseConnection(String url) {
+        this.url = url;
     }
 
-    public Connection createConnection() {
+    // This method creates and sets the connection object
+    public void createConnection() {
         try {
-            return DriverManager.getConnection(DB_URL);
+            connection = DriverManager.getConnection(url);  // Set the connection to the field
+            System.out.println("Connection established successfully.");
         } catch (SQLException e) {
             e.printStackTrace();
             throw new RuntimeException("Failed to connect to the database.");
         }
     }
 
+    // This method returns the existing connection
     public Connection getConnection() {
         return connection;
     }
 
+    // Method to close the connection
     public void closeConnection() {
         try {
             if (connection != null && !connection.isClosed()) {
                 connection.close();
+                System.out.println("Connection closed.");
             }
         } catch (SQLException e) {
             e.printStackTrace();

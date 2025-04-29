@@ -22,6 +22,13 @@ public class User {
         this.deckList = deckList;
     }
 
+    public User(String userID, String userName, String emailAddress, String password) {
+        this.userID = userID;
+        this.userName = userName;
+        this.emailAddress = emailAddress;
+        this.password = password;
+    }
+
     // No-Argument constructor:
     public User() {
         userID = "";

@@ -10,23 +10,70 @@ public class Database {
     }
 
     public static void initializeDatabase() {
-        try (Connection conn = DriverManager.getConnection("jdbc:sqlite:cards.db")) {
+        try (Connection conn = DriverManager.getConnection("jdbc:sqlite:data.db")) {
             Statement stmt = conn.createStatement();
+
+
             stmt.executeUpdate("""
-                CREATE TABLE IF NOT EXISTS cards (
-                    cardID TEXT PRIMARY KEY,
-                    gameType TEXT,
-                    cardName TEXT,
-                    description TEXT,
-                    releaseYear INTEGER,
-                    price REAL
-                );
-            """);
-            System.out.println("Table 'cards' is ready.");
+            CREATE TABLE IF NOT EXISTS cards (
+                cardID TEXT PRIMARY KEY,
+                gameType TEXT,
+                cardName TEXT,
+                description TEXT,
+                releaseYear INTEGER,
+                price REAL
+            );
+        """);
+
+
+            stmt.executeUpdate("""
+            CREATE TABLE IF NOT EXISTS users (
+                userID TEXT PRIMARY KEY,
+                userName TEXT UNIQUE NOT NULL,
+                email TEXT NOT NULL,
+                password TEXT NOT NULL
+            );
+        """);
+
+            stmt.executeUpdate("""
+            CREATE TABLE IF NOT EXISTS decks (
+                deckID TEXT PRIMARY KEY,
+                deckType TEXT
+            );
+        """);
+
+            System.out.println("Tables 'cards', 'users', and 'decks' are ready.");
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
+
+    public boolean validateLogin(String username, String password) {
+        String sql = "SELECT * FROM users WHERE userName = ? AND password = ?";
+        try (PreparedStatement pstmt = dbConnection.getConnection().prepareStatement(sql)) {
+            pstmt.setString(1, username);
+            pstmt.setString(2, password);
+            ResultSet rs = pstmt.executeQuery();
+            return rs.next(); // user found
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean userExists(String username) {
+        String sql = "SELECT 1 FROM users WHERE userName = ?";
+        try (PreparedStatement pstmt = dbConnection.getConnection().prepareStatement(sql)) {
+            pstmt.setString(1, username);
+            ResultSet rs = pstmt.executeQuery();
+            return rs.next(); // user found
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return true; // return true to avoid duplicate registration on error
+        }
+    }
+
 
     // --------- CRUD Operations for Card ---------
 
