@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.net.URL;
 
 public class GUI {
 
@@ -22,14 +23,14 @@ public class GUI {
         title.setForeground(new Color(0, 0, 139));
         title.setHorizontalAlignment(SwingConstants.CENTER);
 
-        JPanel loginCard = createCard("Login", "login.png");
+        JPanel loginCard = createCard("Login", "https://via.placeholder.com/80?text=Login");
         loginCard.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 showLoginScreen();
             }
         });
 
-        JPanel signupCard = createCard("Sign Up", "signup.png");
+        JPanel signupCard = createCard("Sign Up", "https://via.placeholder.com/80?text=Signup");
         signupCard.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 showSignupScreen();
@@ -52,15 +53,20 @@ public class GUI {
         frame.repaint();
     }
 
-    private JPanel createCard(String text, String imagePath) {
+    private JPanel createCard(String text, String imageUrl) {
         JLabel label = new JLabel(text);
         label.setFont(new Font("Arial", Font.PLAIN, 16));
         label.setHorizontalAlignment(SwingConstants.CENTER);
 
         JLabel imageLabel = new JLabel();
-        ImageIcon icon = new ImageIcon(imagePath);
-        Image scaledImage = icon.getImage().getScaledInstance(80, 80, Image.SCALE_SMOOTH);
-        imageLabel.setIcon(new ImageIcon(scaledImage));
+        try {
+            ImageIcon icon = new ImageIcon(new URL(imageUrl));
+            Image scaledImage = icon.getImage().getScaledInstance(80, 80, Image.SCALE_SMOOTH);
+            imageLabel.setIcon(new ImageIcon(scaledImage));
+        } catch (Exception e) {
+            imageLabel.setText("Image not found");
+            imageLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        }
 
         JPanel card = new JPanel();
         card.setLayout(new BoxLayout(card, BoxLayout.Y_AXIS));
@@ -92,7 +98,21 @@ public class GUI {
         JLabel passLabel = new JLabel("Password:");
         JPasswordField password = new JPasswordField(15);
 
+        JLabel errorLabel = new JLabel("");
+        errorLabel.setForeground(Color.RED);
+        errorLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
         JButton login = new JButton("Log In");
+        login.addActionListener(e -> {
+            if (username.getText().trim().isEmpty() || password.getPassword().length == 0) {
+                errorLabel.setText("All fields are required.");
+            } else {
+                errorLabel.setText("");
+                JOptionPane.showMessageDialog(frame, "Login successful (mock)!");
+                showWelcomeScreen();
+            }
+        });
+
         JButton back = new JButton("Back");
         back.addActionListener(e -> showWelcomeScreen());
 
@@ -103,7 +123,9 @@ public class GUI {
         root.add(Box.createVerticalStrut(10));
         root.add(passLabel);
         root.add(password);
-        root.add(Box.createVerticalStrut(15));
+        root.add(Box.createVerticalStrut(10));
+        root.add(errorLabel);
+        root.add(Box.createVerticalStrut(10));
         root.add(login);
         root.add(Box.createVerticalStrut(10));
         root.add(back);
@@ -126,13 +148,39 @@ public class GUI {
         JLabel userLabel = new JLabel("Username:");
         JTextField username = new JTextField(15);
 
+        JLabel emailLabel = new JLabel("Email:");
+        JTextField email = new JTextField(15);
+
         JLabel passLabel = new JLabel("Password:");
         JPasswordField password = new JPasswordField(15);
 
         JLabel confirmLabel = new JLabel("Confirm Password:");
         JPasswordField confirmPassword = new JPasswordField(15);
 
+        JLabel errorLabel = new JLabel("");
+        errorLabel.setForeground(Color.RED);
+        errorLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
         JButton signup = new JButton("Sign Up");
+        signup.addActionListener(e -> {
+            String user = username.getText().trim();
+            String mail = email.getText().trim();
+            String pass = new String(password.getPassword());
+            String confirmPass = new String(confirmPassword.getPassword());
+
+            if (user.isEmpty() || mail.isEmpty() || pass.isEmpty() || confirmPass.isEmpty()) {
+                errorLabel.setText("All fields are required.");
+            } else if (!isValidEmail(mail)) {
+                errorLabel.setText("Invalid email address.");
+            } else if (!pass.equals(confirmPass)) {
+                errorLabel.setText("Passwords do not match.");
+            } else {
+                errorLabel.setText("");
+                JOptionPane.showMessageDialog(frame, "Signup successful (mock)!");
+                showWelcomeScreen();
+            }
+        });
+
         JButton back = new JButton("Back");
         back.addActionListener(e -> showWelcomeScreen());
 
@@ -141,23 +189,33 @@ public class GUI {
         root.add(userLabel);
         root.add(username);
         root.add(Box.createVerticalStrut(10));
+        root.add(emailLabel);
+        root.add(email);
+        root.add(Box.createVerticalStrut(10));
         root.add(passLabel);
         root.add(password);
         root.add(Box.createVerticalStrut(10));
         root.add(confirmLabel);
         root.add(confirmPassword);
-        root.add(Box.createVerticalStrut(15));
+        root.add(Box.createVerticalStrut(10));
+        root.add(errorLabel);
+        root.add(Box.createVerticalStrut(10));
         root.add(signup);
         root.add(Box.createVerticalStrut(10));
         root.add(back);
 
         frame.setContentPane(root);
-        frame.setSize(400, 350);
+        frame.setSize(400, 450);
         frame.revalidate();
         frame.repaint();
     }
 
+    private boolean isValidEmail(String email) {
+        // Basic email validation regex
+        return email.matches("^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$");
+    }
+
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new GUI());
+        SwingUtilities.invokeLater(GUI::new);
     }
 }
