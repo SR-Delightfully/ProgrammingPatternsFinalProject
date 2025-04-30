@@ -7,27 +7,16 @@ import okhttp3.Response;
 import java.io.IOException;
 
 public class ApiResponse {
-    private static final String POKEMON_API_URL = "https://pokeapi.co/api/v2/pokemon/";
-    private static final String MAGIC_API_URL = "https://api.magicthegathering.io/v1/cards";
-    private static final String YUGIOH_API_URL = "https://db.ygoprodeck.com/api/v7/cardinfo.php";
-
     public static String fetchCardData(GameType gameType) {
-        String url = "";
+        String apiUrl;
+
         switch (gameType) {
-            case POKEMON:
-                url = POKEMON_API_URL;
-                break;
-            case MTG:
-                url = MAGIC_API_URL;
-                break;
-            case YUGIOH:
-                url = YUGIOH_API_URL;
-                break;
-            default:
-                System.out.println("Unknown gameType: " + gameType);
-                return null;
+            case POKEMON -> apiUrl = "https://api.pokemontcg.io/v2/cards?page=1&pageSize=20";
+            case MTG -> apiUrl = "https://api.scryfall.com/cards?order=set&q=game:paper&unique=prints";
+            default -> throw new IllegalArgumentException("Unsupported game type: " + gameType);
         }
-        return fetchDataFromAPI(url);
+
+        return fetchDataFromAPI(apiUrl);
     }
 
     private static String fetchDataFromAPI(String url) {
@@ -49,4 +38,3 @@ public class ApiResponse {
         }
     }
 }
-

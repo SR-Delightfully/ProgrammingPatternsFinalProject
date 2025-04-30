@@ -288,7 +288,7 @@ public class GUI {
         // Filter Panel with Game Type ComboBox
         JPanel filterPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10)); // Added space and left alignment
         JLabel filterLabel = new JLabel("Select Game Type:");
-        JComboBox<String> gameTypeComboBox = new JComboBox<>(new String[]{"Pokémon", "Magic", "Yu-Gi-Oh!"});
+        JComboBox<String> gameTypeComboBox = new JComboBox<>(new String[]{"Pokémon", "Magic"});
 
         // Optionally, set a fixed size for the combo box
         gameTypeComboBox.setPreferredSize(new Dimension(200, 30)); // Set size to make it look good
@@ -301,7 +301,6 @@ public class GUI {
             GameType gameType = switch (selectedGameType) {
                 case "Pokémon" -> GameType.POKEMON;
                 case "Magic" -> GameType.MTG;
-                case "Yu-Gi-Oh!" -> GameType.YUGIOH;
                 default -> null;
             };
 
@@ -334,12 +333,6 @@ public class GUI {
         frame.revalidate();
         frame.repaint();
     }
-
-
-
-
-
-
 
     private void fetchAndDisplayCards(GameType gameType) {
         // Fetch data from the API based on the selected game type
@@ -377,7 +370,6 @@ public class GUI {
             cardUI.add(new JLabel("Name: " + card.getCardName()));
             cardUI.add(new JLabel("Game: " + card.getGameType()));
             cardUI.add(new JLabel("Year: " + card.getReleaseDate()));
-            cardUI.add(new JLabel("Price: $" + card.getPrice()));
             panel.add(cardUI);
         }
         footer.setText("Total cards: " + cards.size());
@@ -386,55 +378,43 @@ public class GUI {
     }
 
     private List<Card> parseCardsFromAPIResponse(String apiResponse, GameType gameType) {
-
         List<Card> cards = new ArrayList<>();
+        Gson gson = new Gson();
 
-        System.out.println("Parsed " + cards.size() + " cards");
-
-        // Example logic to parse the API response for different game types
-        if (gameType == (GameType.POKEMON)) {
-            // Example of how to parse Pokémon cards (you will need to adapt this to the actual response structure)
-            // Using Gson to parse the JSON response
-            Gson gson = new Gson();
+        try {
             JsonObject responseJson = gson.fromJson(apiResponse, JsonObject.class);
-            JsonArray results = responseJson.getAsJsonArray("results"); // Assuming the API returns a "results" array
+            JsonArray cardsArray = responseJson.getAsJsonArray("data");
 
-            for (JsonElement element : results) {
+            for (JsonElement element : cardsArray) {
                 JsonObject cardJson = element.getAsJsonObject();
-                String name = cardJson.get("name").getAsString();
-                String releaseDate = "Unknown"; // Pokémon doesn't have a release date in the basic response
-                double price = 5.0; // Default price (you might need to fetch actual pricing)
-                cards.add(new Card(name, GameType.POKEMON, releaseDate, price));
-            }
-        } else if (gameType == (GameType.MTG)) {
-            // Example logic to parse Magic: The Gathering cards
-            Gson gson = new Gson();
-            JsonObject responseJson = gson.fromJson(apiResponse, JsonObject.class);
-            JsonArray cardsJsonArray = responseJson.getAsJsonArray("cards"); // Assuming the API returns a "cards" array
+                String name = cardJson.has("name") ? cardJson.get("name").getAsString() : "Unknown";
+                String releaseDate = "Unknown";
 
-            for (JsonElement element : cardsJsonArray) {
-                JsonObject cardJson = element.getAsJsonObject();
-                String name = cardJson.get("name").getAsString();
-                String releaseDate = cardJson.get("releaseDate").getAsString();
-                double price = cardJson.has("price") ? cardJson.get("price").getAsDouble() : 10.0; // Example price parsing
-                cards.add(new Card(name, GameType.MTG, releaseDate, price));
-            }
-        } else if (gameType == (GameType.YUGIOH)) {
-            // Example logic to parse Yu-Gi-Oh cards
-            Gson gson = new Gson();
-            JsonArray responseJson = gson.fromJson(apiResponse, JsonArray.class);
+                if (gameType == GameType.POKEMON) {
+                    if (cardJson.has("set")) {
+                        JsonObject set = cardJson.getAsJsonObject("set");
+                        if (set.has("releaseDate")) {
+                            releaseDate = set.get("releaseDate").getAsString();
+                        }
+                    }
+                } else if (gameType == GameType.MTG) {
+                    if (cardJson.has("released_at")) {
+                        releaseDate = cardJson.get("released_at").getAsString();
+                    }
+                }
 
-            for (JsonElement element : responseJson) {
-                JsonObject cardJson = element.getAsJsonObject();
-                String name = cardJson.get("name").getAsString();
-                String releaseDate = "Unknown"; // Yu-Gi-Oh API may not have release date in response
-                double price = 8.0; // Default price (you can adjust based on the API)
-                cards.add(new Card(name, GameType.YUGIOH, releaseDate, price));
+                cards.add(new Card(name, gameType, releaseDate));
             }
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         return cards;
     }
+
+
+
 
 
     public static void main(String[] args) {

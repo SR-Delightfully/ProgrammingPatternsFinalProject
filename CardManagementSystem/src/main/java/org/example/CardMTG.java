@@ -17,7 +17,7 @@ public class CardMTG extends Card {
     // All-Argument constructor:s
     public CardMTG(  String id, GameType gameType, String name,String description, String releaseDate, double price, String text, String type,
                      String[] colors, String manaCost, int power, int toughness, String cardType, String[] abilities) {
-        super(id, gameType, name, description, releaseDate, price);
+        super(id, gameType, name, description, releaseDate);
         this.power = power;
         this.toughness = toughness;
         this.cardType = cardType;

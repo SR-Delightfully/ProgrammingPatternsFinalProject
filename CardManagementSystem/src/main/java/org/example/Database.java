@@ -86,7 +86,6 @@ public class Database {
             pstmt.setString(3, card.getCardName());
             pstmt.setString(4, card.getDescription());
             pstmt.setString(5, card.getReleaseDate());
-            pstmt.setDouble(6, card.getPrice());
             pstmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -101,21 +100,26 @@ public class Database {
              PreparedStatement stmt = connection.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
 
-             while (rs.next()) {
-                 String id = rs.getString("id");
-                 String gameTypeStr = rs.getString("game_type");
-                 String name = rs.getString("name");
-                 String description = rs.getString("description");
-                 String releaseDate = rs.getString("release_date");
-                 double price = rs.getDouble("price");
+            while (rs.next()) {
+                String id = rs.getString("cardID");
+                String gameTypeStr = rs.getString("gameType");
+                String name = rs.getString("cardName");
+                String description = rs.getString("description");
+                String releaseDate = rs.getString("releaseYear");
+                double price = rs.getDouble("price");
 
-                 GameType gameType = GameType.valueOf(gameTypeStr.toUpperCase());
+                GameType gameType = switch (gameTypeStr.toUpperCase()) {
+                    case "POKEMON" -> GameType.POKEMON;
+                    case "MTG", "MAGIC" -> GameType.MTG;
+                    default -> throw new IllegalArgumentException("Unknown game type: " + gameTypeStr);
+                };
 
-                 Card card = new Card(id, gameType, name, description, releaseDate, price);
-                 cards.add(card);
-             }
+                Card card = new Card(id, gameType, name, description, releaseDate);
+                cards.add(card);
+            }
+
         } catch (SQLException e) {
-                 e.printStackTrace();
+            e.printStackTrace();
         }
         return cards;
     }
@@ -126,7 +130,6 @@ public class Database {
             pstmt.setString(1, updatedCard.getCardName());
             pstmt.setString(2, updatedCard.getDescription());
             pstmt.setString(3, updatedCard.getReleaseDate());
-            pstmt.setDouble(4, updatedCard.getPrice());
             pstmt.setString(5, cardID);
             pstmt.executeUpdate();
         } catch (SQLException e) {
