@@ -632,59 +632,43 @@ public class GUI {
     }
 
     private List<Card> parseCardsFromAPIResponse(String apiResponse, GameType gameType) {
-
         List<Card> cards = new ArrayList<>();
+        Gson gson = new Gson();
 
-        System.out.println("Parsed " + cards.size() + " cards");
+        try {
+            if (gameType == GameType.POKEMON) {
+                JsonObject responseJson = gson.fromJson(apiResponse, JsonObject.class);
+                JsonArray results = responseJson.getAsJsonArray("data"); // PokéTCG API v2 uses "data"
 
-        // Example logic to parse the API response for different game types
-        if (gameType == (GameType.POKEMON)) {
-            // Example of how to parse Pokémon cards (you will need to adapt this to the actual response structure)
-            // Using Gson to parse the JSON response
-            Gson gson = new Gson();
-            JsonObject responseJson = gson.fromJson(apiResponse, JsonObject.class);
-            JsonArray results = responseJson.getAsJsonArray("data"); // Assuming the API returns a "results" array
+                for (JsonElement element : results) {
+                    JsonObject cardJson = element.getAsJsonObject();
+                    String name = cardJson.get("name").getAsString();
+                    String releaseDate = cardJson.has("set") && cardJson.getAsJsonObject("set").has("releaseDate")
+                            ? cardJson.getAsJsonObject("set").get("releaseDate").getAsString()
+                            : "Unknown";
+                    cards.add(new Card(name, GameType.POKEMON, releaseDate));
+                }
 
-            if (results == null) {
-                System.out.println("No results from Pokemon API");
-                return cards;
+            } else if (gameType == GameType.MTG) {
+                JsonObject responseJson = gson.fromJson(apiResponse, JsonObject.class);
+                JsonArray cardsJsonArray = responseJson.getAsJsonArray("data"); // Scryfall returns "data" array
+
+                for (JsonElement element : cardsJsonArray) {
+                    JsonObject cardJson = element.getAsJsonObject();
+                    String name = cardJson.get("name").getAsString();
+                    String releaseDate = cardJson.has("released_at")
+                            ? cardJson.get("released_at").getAsString()
+                            : "Unknown";
+                    cards.add(new Card(name, GameType.MTG, releaseDate));
+                }
             }
-
-            for (JsonElement element : results) {
-                JsonObject cardJson = element.getAsJsonObject();
-                String name = cardJson.get("name").getAsString();
-                String releaseDate = "Unknown"; // Pokémon doesn't have a release date in the basic response
-                double price = 5.0; // Default price (you might need to fetch actual pricing)
-                cards.add(new Card(name, GameType.POKEMON, releaseDate));
-            }
-        } else if (gameType == (GameType.MTG)) {
-            // Example logic to parse Magic: The Gathering cards
-            Gson gson = new Gson();
-            JsonObject responseJson = gson.fromJson(apiResponse, JsonObject.class);
-            JsonArray cardsJsonArray = responseJson.getAsJsonArray("results"); // Assuming the API returns a "cards" array
-
-            for (JsonElement element : cardsJsonArray) {
-                JsonObject cardJson = element.getAsJsonObject();
-                String name = cardJson.get("name").getAsString();
-                String releaseDate = cardJson.get("releaseDate").getAsString();
-                cards.add(new Card(name, GameType.MTG, releaseDate));
-            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-//        else if (gameType == (Game)) {
-            // Example logic to parse Yu-Gi-Oh cards
-//            Gson gson = new Gson();
-//            JsonArray responseJson = gson.fromJson(apiResponse, JsonArray.class);
-
-//            for (JsonElement element : responseJson) {
-//                JsonObject cardJson = element.getAsJsonObject();
-//                String name = cardJson.get("name").getAsString();
-//                String releaseDate = "Unknown"; // Yu-Gi-Oh API may not have release date in response
-//                cards.add(new Card(name, GameType.YUGIOH, releaseDate));
-//            }
-//        }
 
         return cards;
     }
+
 
     public static void main(String[] args) {
         DatabaseConnection dbConn = new DatabaseConnection("jdbc:sqlite:cards.db");

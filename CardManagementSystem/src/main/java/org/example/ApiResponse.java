@@ -12,7 +12,7 @@ public class ApiResponse {
 
         switch (gameType) {
             case POKEMON -> apiUrl = "https://api.pokemontcg.io/v2/cards?page=1&pageSize=20";
-            case MTG -> apiUrl = "https://api.scryfall.com/cards?order=set&q=game:paper&unique=prints";
+            case MTG -> apiUrl = "https://api.scryfall.com/cards/search?q=type:creature\n";
             default -> throw new IllegalArgumentException("Unsupported game type: " + gameType);
         }
 
