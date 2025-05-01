@@ -120,6 +120,6 @@ public class Card {
                 ", description='" + description + '\'' +
                 ", releaseYear=" + releaseDate +
                 +
-                '}';
+                        '}';
     }
 }

@@ -16,7 +16,7 @@ public class Database {
             Statement stmt = conn.createStatement();
 
 
-            stmt.executeUpdate("""
+            String createCards = """
             CREATE TABLE IF NOT EXISTS cards (
                 cardID TEXT PRIMARY KEY,
                 gameType TEXT,
@@ -25,24 +25,28 @@ public class Database {
                 releaseYear INTEGER,
                 price REAL
             );
-        """);
+        """;
 
 
-            stmt.executeUpdate("""
+            String createUsers = """
             CREATE TABLE IF NOT EXISTS users (
                 userID TEXT PRIMARY KEY,
                 userName TEXT UNIQUE NOT NULL,
                 email TEXT NOT NULL,
                 password TEXT NOT NULL
             );
-        """);
+        """;
 
-            stmt.executeUpdate("""
+            String createDecks = """
             CREATE TABLE IF NOT EXISTS decks (
                 deckID TEXT PRIMARY KEY,
                 deckType TEXT
             );
-        """);
+        """;
+
+        stmt.execute(createUsers);
+        stmt.execute(createCards);
+        stmt.execute(createDecks);
 
         } catch (Exception e) {
             e.printStackTrace();
