@@ -399,106 +399,42 @@ public class GUIview {
         root.setBackground(new Color(47, 36, 71));
         root.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
-        JPanel headerPanel = new JPanel();
-        JPanel titlePanel = new JPanel();
-        titlePanel.setBackground(new Color(227, 237, 43));
+        // Title
         JLabel title = new JLabel(gameType + " Card Collection", JLabel.CENTER);
         title.setFont(new Font("Arial", Font.BOLD, 30));
         title.setForeground(new Color(47, 36, 71));
-        titlePanel.setLayout(new BorderLayout());
+
+        JPanel titlePanel = new JPanel(new BorderLayout());
+        titlePanel.setBackground(new Color(227, 237, 43));
         titlePanel.add(title, BorderLayout.CENTER);
 
-        JPanel searchPanel = new JPanel(new BorderLayout(5, 5));
-        searchPanel.setBackground(new Color(47, 36, 71));
-        JTextField searchField = new JTextField();
-        JButton searchButton = new JButton(messageProvider.getSearchButtonLabel());
-        headerPanel.add(titlePanel);
-        headerPanel.add(searchPanel);
-        headerPanel.setLayout(new BoxLayout(headerPanel, BoxLayout.Y_AXIS));
-
-        searchButton.setBackground(new Color(127, 116, 182));
-        searchButton.setFont(new Font("Arial", Font.PLAIN, 14));
-        searchButton.setForeground(Color.BLACK);
-
-        searchPanel.add(searchField, BorderLayout.CENTER);
-        searchPanel.add(searchButton, BorderLayout.EAST);
-        searchPanel.setPreferredSize(new Dimension(800, 40));
-
-        JPanel sidebar = new JPanel();
-        sidebar.setLayout(new BoxLayout(sidebar, BoxLayout.Y_AXIS));
-        sidebar.setPreferredSize(new Dimension(100, 0));
-
-        if (gameType == GameType.POKEMON) {
-            sidebar.add(new JLabel(messageProvider.getFilterTypeLabel()));
-            JComboBox<String> typeBox = new JComboBox<>(new String[]{"All","Normal","Fire","Fighting","Water",
-                    "Flying","Grass","Poison","Electric",
-                    "Ground","Psychic","Rock","Ice",
-                    "Bug","Dragon","Ghost","Dark",
-                    "Steel","Fairy","Stellar","???"});
-            typeBox.setPreferredSize(new Dimension(150, 30));
-            typeBox.setMaximumSize(new Dimension(150, 30));
-            typeBox.addActionListener(e -> {
-                String selectedType = (String) typeBox.getSelectedItem();
-                fetchAndDisplayCards(gameType, selectedType, null);
-            });
-            sidebar.add(typeBox);
-
-            sidebar.add(Box.createVerticalStrut(10));
-
-            sidebar.add(new JLabel(messageProvider.getFilterStageLabel()));
-        }
-
-        if (gameType == GameType.MTG) {
-            sidebar.add(new JLabel(messageProvider.getFilterByColorLabel()));
-            JComboBox<String> colorBox = new JComboBox<>(new String[]{"All", "White", "Blue", "Black", "Red", "Green"});
-            colorBox.setPreferredSize(new Dimension(150, 30));
-            colorBox.setMaximumSize(new Dimension(150, 30));
-            colorBox.addActionListener(e -> {
-                String selectedColor = (String) colorBox.getSelectedItem();
-                fetchAndDisplayCards(gameType, null, selectedColor);
-            });
-
-            sidebar.add(colorBox);
-
-            sidebar.add(Box.createVerticalStrut(10));
-
-            sidebar.add(new JLabel(messageProvider.getFilterByTypeLabel()));
-            JComboBox<String> typeBox = new JComboBox<>(new String[]{"All", "Creature", "Instant", "Sorcery", "Artifact", "Enchantment", "Planeswalker", "Land"});
-            typeBox.setPreferredSize(new Dimension(150, 30));
-            typeBox.setMaximumSize(new Dimension(150, 30));
-            sidebar.add(typeBox);
-        }
-
-        JPanel cardPanel = new JPanel(new GridLayout(0, 3, 10, 10));
+        // Main card panel (Grid)
+        cardPanel = new JPanel(new GridLayout(0, 3, 10, 10));
         JScrollPane scrollPane = new JScrollPane(cardPanel);
         scrollPane.setPreferredSize(new Dimension(600, 450));
 
-        JLabel footerLabel = new JLabel(messageProvider.getTotalCardsLabel());
+        // Footer
+        footerLabel = new JLabel(messageProvider.getTotalCardsLabel());
         JPanel footerPanel = new JPanel(new BorderLayout());
         footerPanel.setBackground(new Color(47, 36, 71));
         footerPanel.add(footerLabel, BorderLayout.WEST);
 
-        JPanel rightGroup = new JPanel(new BorderLayout());
-        rightGroup.add(scrollPane, BorderLayout.CENTER);
-        rightGroup.add(footerLabel, BorderLayout.SOUTH);
+        JPanel centerPanel = new JPanel(new BorderLayout());
+        centerPanel.add(scrollPane, BorderLayout.CENTER);
+        centerPanel.add(footerPanel, BorderLayout.SOUTH);
 
-        root.add(headerPanel, BorderLayout.NORTH);
-        root.add(sidebar, BorderLayout.WEST);
-        root.add(rightGroup, BorderLayout.CENTER);
+        root.add(titlePanel, BorderLayout.NORTH);
+        root.add(centerPanel, BorderLayout.CENTER);
 
-        searchButton.addActionListener(e -> {
-            String keyword = searchField.getText().trim().toLowerCase();
-            fetchAndDisplayCards(gameType, "All", null, keyword);
-        });
-
-        // Initially fetch all cards for the selected game type
-        fetchAndDisplayCards(gameType, "All", null, "");
+        // Load and display cards
+        fetchAndDisplayCards(gameType, "All", null);
 
         frame.setContentPane(root);
         frame.setSize(800, 700);
         frame.revalidate();
         frame.repaint();
     }
+
 
     private void fetchAndDisplayCards(GameType gameType, String typeFilter, String colorFilter, String searchKeyword) {
         List<Card> cards;
