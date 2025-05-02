@@ -11,7 +11,7 @@ public class Main {
     public static void main(String[] args) {
         Database.initializeDatabase();
 
-        DatabaseConnection dbConn = new DatabaseConnection("jdbc:sqlite:data.db");
+        DatabaseConnection dbConn = new DatabaseConnection();
         dbConn.createConnection();
 
         if (dbConn.getConnection() == null) {

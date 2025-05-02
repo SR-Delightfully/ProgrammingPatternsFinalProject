@@ -2,7 +2,9 @@ package org.example;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Database {
     private DatabaseConnection dbConnection;
@@ -279,4 +281,54 @@ public class Database {
             e.printStackTrace();
         }
     }
+    // ------- Sorting Methods Using Streams -------
+
+    // Sort cards by name (Alphabetically)
+    public List<Card> getCardsSortedByName() {
+        return getAllCards().stream()
+                .sorted(Comparator.comparing(Card::getCardName))
+                .collect(Collectors.toList());
+    }
+
+    // Sort cards by game type (Alphabetically)
+    public List<Card> getCardsSortedByGameType() {
+        return getAllCards().stream()
+                .sorted(Comparator.comparing(Card::getGameType))
+                .collect(Collectors.toList());
+    }
+
+    // Sort cards by release year (Oldest to Newest)
+    public List<Card> getCardsSortedByYearAsc() {
+        return getAllCards().stream()
+                .sorted(Comparator.comparing(Card::getReleaseDate))
+                .collect(Collectors.toList());
+    }
+
+    // Sort cards by release year (Newest to Oldest)
+    public List<Card> getCardsSortedByYearDesc() {
+        return getAllCards().stream()
+                .sorted(Comparator.comparing(Card::getReleaseDate).reversed())
+                .collect(Collectors.toList());
+    }
+    public List<Card> searchCardsByName(String keyword) {
+        return getAllCards().stream()
+                .filter(card -> card.getCardName().toLowerCase().contains(keyword.toLowerCase()))
+                .collect(Collectors.toList());
+    }
+
+    public List<Card> filterCardsByGameType(GameType gameType) {
+        return getAllCards().stream()
+                .filter(card -> card.getGameType() == gameType)
+                .collect(Collectors.toList());
+    }
+
+    public List<Card> filterCardsByYear(String year) {
+        return getAllCards().stream()
+                .filter(card -> card.getReleaseDate().equals(year))
+                .collect(Collectors.toList());
+    }
+
+
+
+
 }

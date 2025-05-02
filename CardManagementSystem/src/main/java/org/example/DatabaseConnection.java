@@ -5,20 +5,29 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class DatabaseConnection {
-    private final String url;
+    private static DatabaseConnection instance; // Singleton instance
+    private static final String DB_URL = "jdbc:sqlite:data.db"; // Fixed database URL
     private Connection connection;
 
-    // Constructor to set the URL
-    public DatabaseConnection(String url) {
-        this.url = url;
+    // Private constructor to prevent external instantiation
+    DatabaseConnection() {
+        createConnection();
+    }
+
+    // Singleton instance getter (Lazy Initialization)
+    public static synchronized DatabaseConnection getInstance() {
+        if (instance == null) {
+            instance = new DatabaseConnection();
+        }
+        return instance;
     }
 
     /**
-     *  This method creates and sets the connection objects
+     * Creates and sets the connection object
      */
-    public void createConnection() {
+    void createConnection() {
         try {
-            connection = DriverManager.getConnection(url);  // Set the connection to the field
+            connection = DriverManager.getConnection(DB_URL); // Uses predefined URL
             System.out.println("Connection established successfully.");
         } catch (SQLException e) {
             e.printStackTrace();
@@ -27,7 +36,7 @@ public class DatabaseConnection {
     }
 
     /**
-     * This method returns the existing connection
+     * Returns the existing connection
      * @return an open connection
      */
     public Connection getConnection() {
@@ -35,13 +44,14 @@ public class DatabaseConnection {
     }
 
     /**
-     * Method to close the connection
+     * Closes the connection and resets the instance
      */
     public void closeConnection() {
         try {
             if (connection != null && !connection.isClosed()) {
                 connection.close();
                 System.out.println("Connection closed.");
+                instance = null; // Allow reinitialization if needed
             }
         } catch (SQLException e) {
             e.printStackTrace();

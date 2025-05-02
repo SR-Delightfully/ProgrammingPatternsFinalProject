@@ -29,6 +29,10 @@ public class GUIview {
         this.messageProvider = messageProvider;
 
         this.frame = new JFrame("Card Collector");
+        if (footerLabel == null) {
+            footerLabel = new JLabel("Total Cards: 0");  // Initialize it if it's null
+        }
+
         this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.frame.setVisible(true);
     }
@@ -435,7 +439,7 @@ public class GUIview {
             typeBox.setMaximumSize(new Dimension(150, 30));
             typeBox.addActionListener(e -> {
                 String selectedType = (String) typeBox.getSelectedItem();
-//                applyFilters(gameType, selectedType, null);
+                fetchAndDisplayCards(gameType, selectedType, null);
             });
             sidebar.add(typeBox);
 
@@ -443,16 +447,15 @@ public class GUIview {
 
             sidebar.add(new JLabel(messageProvider.getFilterStageLabel()));
         }
-        if (gameType == GameType.MTG) {
 
+        if (gameType == GameType.MTG) {
             sidebar.add(new JLabel(messageProvider.getFilterByColorLabel()));
             JComboBox<String> colorBox = new JComboBox<>(new String[]{"All", "White", "Blue", "Black", "Red", "Green"});
             colorBox.setPreferredSize(new Dimension(150, 30));
             colorBox.setMaximumSize(new Dimension(150, 30));
             colorBox.addActionListener(e -> {
                 String selectedColor = (String) colorBox.getSelectedItem();
-//                String selectedCardType = (String) typeBox.getSelectedItem();
-//                applyFilters(gameType, selectedColor, selectedCardType);
+                fetchAndDisplayCards(gameType, null, selectedColor);
             });
 
             sidebar.add(colorBox);
@@ -466,11 +469,11 @@ public class GUIview {
             sidebar.add(typeBox);
         }
 
-        cardPanel = new JPanel(new GridLayout(0, 3, 10, 10));
+        JPanel cardPanel = new JPanel(new GridLayout(0, 3, 10, 10));
         JScrollPane scrollPane = new JScrollPane(cardPanel);
         scrollPane.setPreferredSize(new Dimension(600, 450));
 
-        footerLabel = new JLabel(messageProvider.getTotalCardsLabel());
+        JLabel footerLabel = new JLabel(messageProvider.getTotalCardsLabel());
         JPanel footerPanel = new JPanel(new BorderLayout());
         footerPanel.setBackground(new Color(47, 36, 71));
         footerPanel.add(footerLabel, BorderLayout.WEST);
@@ -485,69 +488,53 @@ public class GUIview {
 
         searchButton.addActionListener(e -> {
             String keyword = searchField.getText().trim().toLowerCase();
+            fetchAndDisplayCards(gameType, "All", null, keyword);
         });
-        fetchAndDisplayCards(gameType, "All", null);
+
+        // Initially fetch all cards for the selected game type
+        fetchAndDisplayCards(gameType, "All", null, "");
+
         frame.setContentPane(root);
         frame.setSize(800, 700);
         frame.revalidate();
         frame.repaint();
     }
 
-//    CAN BE DELETED?
-//    private void showMainGUI() {
-//        JPanel root = new JPanel(new BorderLayout());
-//        root.setBackground(new Color(47, 36, 71));
-//
-//        root.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-//
-//        JPanel header = new JPanel(new BorderLayout());
-//        JLabel title = new JLabel("My Card Collection");
-//        title.setFont(new Font("Arial", Font.BOLD, 22));
-//        JButton logout = new JButton("Logout");
-//        logout.addActionListener(e -> showWelcomeScreen());
-//
-//        header.add(title, BorderLayout.WEST);
-//        header.add(logout, BorderLayout.EAST);
-//
-//        JPanel filterPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
-//        JLabel filterLabel = new JLabel("Select Game Type:");
-//        JComboBox<String> gameTypeComboBox = new JComboBox<>(new String[]{"Pokémon", "Magic", "Yu-Gi-Oh!"});
-//
-//        gameTypeComboBox.setPreferredSize(new Dimension(200, 30));
-//
-//        gameTypeComboBox.addActionListener(e -> {
-//            String selectedGameType = (String) gameTypeComboBox.getSelectedItem();
-//            System.out.println("Selected Game Type: " + selectedGameType);
-//
-//            GameType gameType = switch (selectedGameType) {
-//                case "Pokémon" -> GameType.POKEMON;
-//                case "Magic" -> GameType.MTG;
-//                default -> null;
-//            };
-//
-//            if (gameType != null) {
-//                fetchAndDisplayCards(gameType);
-//            }
-//        });
-//
-//        filterPanel.add(filterLabel);
-//        filterPanel.add(gameTypeComboBox);
-//
-//        cardPanel = new JPanel(new GridLayout(0, 3, 10, 10));
-//        JScrollPane scrollPane = new JScrollPane(cardPanel);
-//
-//        footerLabel = new JLabel("Total cards: 0");
-//
-//        root.add(header, BorderLayout.NORTH);
-//        root.add(filterPanel, BorderLayout.NORTH);
-//        root.add(scrollPane, BorderLayout.CENTER);
-//        root.add(footerLabel, BorderLayout.SOUTH);
-//
-//        frame.setContentPane(root);
-//        frame.setSize(800, 700);
-//        frame.revalidate();
-//        frame.repaint();
-//    }
+    private void fetchAndDisplayCards(GameType gameType, String typeFilter, String colorFilter, String searchKeyword) {
+        List<Card> cards;
+        CardController cardController = new CardController(database);
+
+        if (cardPanel == null) {
+            cardPanel = new JPanel(new GridLayout(0, 3, 10, 10)); // Initialize it if it's null
+        }
+        // Apply filters and search
+        if (gameType == GameType.POKEMON) {
+            cards = cardController.filterAndSearchPokemonCards(typeFilter, searchKeyword);
+        } else if (gameType == GameType.MTG) {
+            cards = cardController.filterAndSearchMTGCards(colorFilter, typeFilter, searchKeyword);
+        } else {
+            cards =  cardController.getAllCards();  // Fallback case if no filters applied
+        }
+
+        // Clear current card panel
+        cardPanel.removeAll();
+
+        // Add the filtered cards to the panel
+        for (Card card : cards) {
+            JLabel cardLabel = new JLabel(card.getCardName());
+            cardPanel.add(cardLabel);
+        }
+
+
+
+        // Update the footer label to show total card count
+        footerLabel.setText("Total cards: " + cards.size());
+
+        // Refresh the view
+        cardPanel.revalidate();
+        cardPanel.repaint();
+    }
+
 
     /**
      * Used to create a card container; a simple box with a title, subtitle and possibly images.
@@ -742,22 +729,4 @@ public class GUIview {
     public void displayError(String error) {
         JOptionPane.showMessageDialog(frame, error, "Error", JOptionPane.ERROR_MESSAGE);
     }
-
-// Attempting to add filters :(
-
-//    private void applyFilters(GameType gameType, String filter1, String filter2) {
-//        List<Card> filteredCards = database.getFilteredCards(gameType, filter1, filter2);
-//
-//        cardPanel.removeAll();
-//
-//        for (Card card : filteredCards) {
-//            JPanel cardDisplayPanel = createCardPanel(card);
-//            cardPanel.add(cardDisplayPanel);
-//        }
-//
-//        footerLabel.setText("Total Cards: " + filteredCards.size());
-//
-//        cardPanel.revalidate();
-//        cardPanel.repaint();
-//    }
 }
