@@ -11,6 +11,9 @@ public class Database {
         this.dbConnection = dbConnection;
     }
 
+    /**
+     * Used to initialize the database, will test the connection and throw an error if the connection is not safe
+     */
     public static void initializeDatabase() {
         try (Connection conn = DriverManager.getConnection("jdbc:sqlite:data.db")) {
             Statement stmt = conn.createStatement();
@@ -53,7 +56,12 @@ public class Database {
         }
     }
 
-
+    /**
+     * Used to validate the user's login information
+     * @param username refers to the username being tested
+     * @param password refers to the password being tested
+     * @return returns true if valid, false if not
+     */
     public boolean validateLogin(String username, String password) {
         String sql = "SELECT * FROM users WHERE userName = ? AND password = ?";
         try (PreparedStatement pstmt = dbConnection.getConnection().prepareStatement(sql)) {
@@ -67,6 +75,11 @@ public class Database {
         }
     }
 
+    /**
+     * Used to check if a record with the user's name already exists
+     * @param username refers to the username in question
+     * @return returns true if they exist, false if not
+     */
     public boolean userExists(String username) {
         String sql = "SELECT 1 FROM users WHERE userName = ?";
         try (PreparedStatement pstmt = dbConnection.getConnection().prepareStatement(sql)) {
@@ -82,6 +95,10 @@ public class Database {
 
     // --------- CRUD Operations for Card ---------
 
+    /**
+     * Used to ease the process of creating a card
+     * @param card refers to an instance of the card class that you would like to add as a record
+     */
     public void addCard(Card card) {
         String sql = "INSERT INTO cards (cardID, gameType, cardName, description, releaseYear, price) VALUES (?, ?, ?, ?, ?, ?)";
         try (PreparedStatement pstmt = dbConnection.getConnection().prepareStatement(sql)) {
@@ -96,12 +113,18 @@ public class Database {
         }
     }
 
+    /**
+     * Used to get a list of all the cards that were received and parsed from the API
+     * @return returns a List of Card class instances that have been created from the data gathered from the aPI
+     */
     public List<Card> getAllCards() {
         List<Card> cards = new ArrayList<>();
         String sql = "SELECT * FROM cards";
 
-        try (Connection connection = dbConnection.getConnection();
-             PreparedStatement stmt = connection.prepareStatement(sql);
+        // Get the connection explicitly
+        Connection connection = dbConnection.getConnection();
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {
@@ -121,13 +144,19 @@ public class Database {
                 Card card = new Card(id, gameType, name, description, releaseDate);
                 cards.add(card);
             }
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+        // Return the list of cards
         return cards;
     }
 
+    /**
+     * Used to update a card record
+     * @param cardID refers to the id of the record you would like to update
+     * @param updatedCard refers to the new card instance
+     */
     public void updateCard(String cardID, Card updatedCard) {
         String sql = "UPDATE cards SET cardName = ?, description = ?, releaseYear = ?, price = ? WHERE cardID = ?";
         try (PreparedStatement pstmt = dbConnection.getConnection().prepareStatement(sql)) {
@@ -141,6 +170,10 @@ public class Database {
         }
     }
 
+    /**
+     * Used to remove a card from the database
+     * @param cardID refers to the id of the card you would like to delete
+     */
     public void removeCard(String cardID) {
         String sql = "DELETE FROM cards WHERE cardID = ?";
         try (PreparedStatement pstmt = dbConnection.getConnection().prepareStatement(sql)) {
@@ -153,6 +186,10 @@ public class Database {
 
     // --------- CRUD Operations for Deck ---------
 
+    /**
+     * Used to ease the process of creating a deck
+     * @param deck refers to an instance of the deck class that you would like to add as a record
+     */
     public void addDeck(Deck deck) {
         String sql = "INSERT INTO decks (deckID, deckType) VALUES (?, ?)";
         try (PreparedStatement pstmt = dbConnection.getConnection().prepareStatement(sql)) {
@@ -164,6 +201,10 @@ public class Database {
         }
     }
 
+    /**
+     * Used to remove a card from the database
+     * @param deckID refers to the id of the deck you would like to delete
+     */
     public void updateDeck(String deckID, Deck updatedDeck) {
         String sql = "UPDATE decks SET deckType = ? WHERE deckID = ?";
         try (PreparedStatement pstmt = dbConnection.getConnection().prepareStatement(sql)) {
@@ -175,6 +216,10 @@ public class Database {
         }
     }
 
+    /**
+     * Used to remove a deck from the database
+     * @param deckID refers to the id of the deck you would like to delete
+     */
     public void removeDeck(String deckID) {
         String sql = "DELETE FROM decks WHERE deckID = ?";
         try (PreparedStatement pstmt = dbConnection.getConnection().prepareStatement(sql)) {
@@ -187,6 +232,10 @@ public class Database {
 
     // --------- CRUD Operations for User ---------
 
+    /**
+     * Used to ease the process of creating a user
+     * @param user refers to an instance of the user class that you would like to add as a record
+     */
     public void addUser(User user) {
         String sql = "INSERT INTO users (userID, userName, email, password) VALUES (?, ?, ?, ?)";
         try (PreparedStatement pstmt = dbConnection.getConnection().prepareStatement(sql)) {
@@ -200,6 +249,10 @@ public class Database {
         }
     }
 
+    /**
+     * Used to update a user from the database
+     * @param userID refers to the id of the user you would like to delete
+     */
     public void updateUser(String userID, User updatedUser) {
         String sql = "UPDATE users SET userName = ?, email = ?, password = ? WHERE userID = ?";
         try (PreparedStatement pstmt = dbConnection.getConnection().prepareStatement(sql)) {
@@ -213,6 +266,10 @@ public class Database {
         }
     }
 
+    /**
+     * Used to remove a user from the database
+     * @param userID refers to the id of the user you would like to delete
+     */
     public void removeUser(String userID) {
         String sql = "DELETE FROM users WHERE userID = ?";
         try (PreparedStatement pstmt = dbConnection.getConnection().prepareStatement(sql)) {
@@ -222,6 +279,4 @@ public class Database {
             e.printStackTrace();
         }
     }
-
-
 }

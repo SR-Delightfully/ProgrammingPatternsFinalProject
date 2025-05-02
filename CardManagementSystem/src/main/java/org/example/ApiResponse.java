@@ -19,6 +19,11 @@ public class ApiResponse {
         return fetchDataFromAPI(apiUrl);
     }
 
+    /**
+     * Used to fetch information from an API and convert it to a string for further parsing later
+     * @param url refers to the Key for the API you would like to fetch from
+     * @return returns a string with the API's response
+     */
     private static String fetchDataFromAPI(String url) {
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()

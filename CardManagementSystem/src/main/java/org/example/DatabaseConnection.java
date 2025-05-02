@@ -13,7 +13,9 @@ public class DatabaseConnection {
         this.url = url;
     }
 
-    // This method creates and sets the connection object
+    /**
+     *  This method creates and sets the connection objects
+     */
     public void createConnection() {
         try {
             connection = DriverManager.getConnection(url);  // Set the connection to the field
@@ -24,12 +26,17 @@ public class DatabaseConnection {
         }
     }
 
-    // This method returns the existing connection
+    /**
+     * This method returns the existing connection
+     * @return an open connection
+     */
     public Connection getConnection() {
         return connection;
     }
 
-    // Method to close the connection
+    /**
+     * Method to close the connection
+     */
     public void closeConnection() {
         try {
             if (connection != null && !connection.isClosed()) {
